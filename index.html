@@ -142,12 +142,16 @@ body.night #bg rect{filter:url(#paintSoft)}
 .term-line{display:flex;align-items:center;gap:8px;border:1px dashed rgba(247,238,219,.28);border-radius:8px;padding:4px 4px 4px 10px}
 .term-line:focus-within{border-style:solid;border-color:#f2c35b}
 .term-line .ps{color:#8dbd9b;font-weight:700}
-.term-in{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#f7eedb;font:400 16px/1.4 var(--f-mono);caret-color:#f2c35b;padding:8px 0}
+.term-in{flex:1;min-width:0;letter-spacing:-.02em;background:transparent;border:0;outline:0;color:#f7eedb;font:400 16px/1.4 var(--f-mono);caret-color:#f2c35b;padding:8px 0}
 .term-in::placeholder{color:#5d6485}
-.term-go{appearance:none;cursor:pointer;border:0;background:#f2c35b;color:#1f2640;font:700 .8rem/1 var(--f-mono);border-radius:6px;padding:11px 10px;touch-action:manipulation;white-space:nowrap}
+.term-go{appearance:none;cursor:pointer;border:0;background:#f2c35b;color:#1f2640;font:700 1.05rem/1 var(--f-mono);border-radius:6px;padding:9px 12px;touch-action:manipulation;white-space:nowrap}
 .term-go:active{transform:translateY(1px)}
 .term .hearts{color:#8e95b3;font-size:.8rem}
+.term-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.term-hint{appearance:none;cursor:pointer;background:none;border:1px dashed #8e95b3;color:#c9c6d8;font:400 .8rem/1 var(--f-mono);border-radius:6px;padding:9px 10px;touch-action:manipulation}
+.term-hint:active{transform:translateY(1px)}
 .term .hearts svg{width:22px;height:20px}
+.term .hearts path{stroke:#d64550}
 .tag{position:absolute;right:-6px;top:-20px;z-index:2;background:#fbeeb0;padding:6px 14px 4px;font:700 1.45rem/1 var(--f-script);color:var(--ink);transform:rotate(5deg);box-shadow:2px 3px 0 rgba(0,0,0,.25)}
 .tag::before{content:"";position:absolute;left:50%;top:-9px;width:50px;height:16px;margin-left:-25px;background:var(--tape);transform:rotate(-4deg)}
 .term.out{animation:termout .9s ease-in forwards}
@@ -256,7 +260,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
 .skill:disabled{cursor:default}
 .skill:active:not(:disabled){transform:scale(.94)}
 .fightui{display:flex;flex-direction:column;gap:12px}
-.skip{align-self:center;margin-top:-4px}
+.skip{display:block;margin:6px auto 0}
 
 /* regalo + ramo */
 .gift{position:relative;width:180px;height:180px;margin:22px auto 4px;appearance:none;background:none;border:0;padding:0;cursor:pointer;animation:wiggle 2.4s ease-in-out infinite}
@@ -353,6 +357,10 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       <feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="4" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
     </filter>
+    <filter id="wobbleWide" x="-40%" y="-30%" width="180%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
+    </filter>
     <filter id="paint" x="-5%" y="-5%" width="110%" height="110%">
       <feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" seed="8" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="5" result="d"/>
@@ -387,8 +395,8 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
           <div id="termLog" aria-live="polite"></div>
           <form id="pwForm" class="term-form" autocomplete="off" hidden>
             <label class="term-q" for="pwInput" data-t="lock.prompt"></label>
-            <div class="term-line"><span class="ps">›</span><input class="term-in" id="pwInput" type="text" inputmode="decimal" data-t-ph="lock.ph" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="term-go" type="submit" data-t="lock.enter"></button></div>
-            <div class="hearts" id="hearts"></div>
+            <div class="term-line"><span class="ps">›</span><input class="term-in" id="pwInput" type="text" inputmode="numeric" data-t-ph="lock.ph" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="term-go" type="submit" data-t="lock.enter" data-t-aria="lock.enterAria"></button></div>
+            <div class="term-foot"><div class="hearts" id="hearts"></div><button class="term-hint" type="button" id="pwHintBtn" data-t="lock.hint"></button></div>
           </form>
         </div>
       </div>
@@ -460,9 +468,8 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       <div class="skills" id="skills"></div>
     </div>
     <div class="note" id="winNote" hidden><h3 data-t="game.winTitle"></h3><p data-t="game.winText"></p></div>
-    <div class="note r" id="loseNote" hidden><h3 data-t="game.loseTitle"></h3><p data-t="game.loseText"></p><div class="row" style="margin-top:10px"><button class="link" type="button" id="changeClass" data-t="game.changeClass"></button><button class="btn" type="button" id="retry" data-t="game.retry"></button></div></div>
-    <button class="link quiet skip" type="button" id="skipGame" data-t="game.skip"></button>
-    <button class="tapnext" type="button" data-next="p-gift" hidden id="nextGame"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="#f2c35b" stroke="currentColor" stroke-width="2"/></svg><span data-t="next"></span></button>
+    <div class="note r" id="loseNote" hidden><h3 data-t="game.loseTitle"></h3><p data-t="game.loseText"></p><div class="row" style="margin-top:10px"><button class="link" type="button" id="changeClass" data-t="game.changeClass"></button><button class="btn" type="button" id="retry" data-t="game.retry"></button></div><button class="link quiet skip" type="button" id="skipGame" data-t="game.skip" hidden></button></div>
+        <button class="tapnext" type="button" data-next="p-gift" hidden id="nextGame"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="#f2c35b" stroke="currentColor" stroke-width="2"/></svg><span data-t="next"></span></button>
   </section>
 
   <!-- 4 · regalo + flores -->
@@ -493,20 +500,20 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
         </defs>
         <g id="tart" filter="url(#wobble)"></g>
         <g class="candle" id="c3">
-          <circle class="fglow" cx="132" cy="36" r="32" fill="url(#glow)"/>
-          <g filter="url(#wobble)"><path d="M116 80 Q 130 64 146 76 Q 154 90 134 102 Q 156 110 148 128 Q 134 146 114 132" stroke="#2b3350" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M116 80 Q 130 64 146 76 Q 154 90 134 102 Q 156 110 148 128 Q 134 146 114 132" stroke="#fffcf5" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M116 80 Q 130 64 146 76 Q 154 90 134 102 Q 156 110 148 128 Q 134 146 114 132" stroke="#eb9ab2" stroke-width="17" fill="none" stroke-dasharray="6 7"/><path d="M116 80 Q 130 64 146 76 Q 154 90 134 102 Q 156 110 148 128 Q 134 146 114 132" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7" transform="translate(-3 -3)"/></g>
-          <path d="M132 46 v14" stroke="#2b3350" stroke-width="2.5" stroke-linecap="round"/>
-          <path class="flame" d="M132 20 C 141 32, 141 42, 132 48 C 123 42, 123 32, 132 20 Z" fill="url(#fg)" stroke="#e3a93e" stroke-width="1"/>
-          <circle class="smoke" cx="132" cy="40" r="7" fill="#c9ccd6"/>
-          <circle class="flame-hit" cx="132" cy="38" r="28" fill="transparent"/>
+          <circle class="fglow" cx="132" cy="26" r="32" fill="url(#glow)"/>
+          <g filter="url(#wobbleWide)"><path d="M116 70 Q 130 54 146 66 Q 154 80 134 92 Q 156 100 148 118 Q 134 136 114 122" stroke="#2b3350" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M116 70 Q 130 54 146 66 Q 154 80 134 92 Q 156 100 148 118 Q 134 136 114 122" stroke="#eb9ab2" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M116 70 Q 130 54 146 66 Q 154 80 134 92 Q 156 100 148 118 Q 134 136 114 122" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55" transform="translate(-3 -3)"/></g>
+          <path d="M132 36 v14" stroke="#2b3350" stroke-width="2.5" stroke-linecap="round"/>
+          <path class="flame" d="M132 10 C 141 22, 141 32, 132 38 C 123 32, 123 22, 132 10 Z" fill="url(#fg)" stroke="#e3a93e" stroke-width="1"/>
+          <circle class="smoke" cx="132" cy="30" r="7" fill="#c9ccd6"/>
+          <circle class="flame-hit" cx="132" cy="28" r="28" fill="transparent"/>
         </g>
         <g class="candle" id="c0">
-          <circle class="fglow" cx="188" cy="36" r="32" fill="url(#glow)"/>
-          <g filter="url(#wobble)"><path d="M188 77 C 206 77, 206 133, 188 133 C 170 133, 170 77, 188 77 Z" stroke="#2b3350" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M188 77 C 206 77, 206 133, 188 133 C 170 133, 170 77, 188 77 Z" stroke="#fffcf5" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M188 77 C 206 77, 206 133, 188 133 C 170 133, 170 77, 188 77 Z" stroke="#9db8e0" stroke-width="17" fill="none" stroke-dasharray="6 7"/><path d="M188 77 C 206 77, 206 133, 188 133 C 170 133, 170 77, 188 77 Z" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7" transform="translate(-3 -3)"/></g>
-          <path d="M188 46 v20" stroke="#2b3350" stroke-width="2.5" stroke-linecap="round"/>
-          <path class="flame" d="M188 20 C 197 32, 197 42, 188 48 C 179 42, 179 32, 188 20 Z" fill="url(#fg)" stroke="#e3a93e" stroke-width="1"/>
-          <circle class="smoke" cx="188" cy="40" r="7" fill="#c9ccd6"/>
-          <circle class="flame-hit" cx="188" cy="38" r="28" fill="transparent"/>
+          <circle class="fglow" cx="188" cy="26" r="32" fill="url(#glow)"/>
+          <g filter="url(#wobbleWide)"><path d="M188 67 C 206 67, 206 123, 188 123 C 170 123, 170 67, 188 67 Z" stroke="#2b3350" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M188 67 C 206 67, 206 123, 188 123 C 170 123, 170 67, 188 67 Z" stroke="#eb9ab2" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M188 67 C 206 67, 206 123, 188 123 C 170 123, 170 67, 188 67 Z" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55" transform="translate(-3 -3)"/></g>
+          <path d="M188 36 v20" stroke="#2b3350" stroke-width="2.5" stroke-linecap="round"/>
+          <path class="flame" d="M188 10 C 197 22, 197 32, 188 38 C 179 32, 179 22, 188 10 Z" fill="url(#fg)" stroke="#e3a93e" stroke-width="1"/>
+          <circle class="smoke" cx="188" cy="30" r="7" fill="#c9ccd6"/>
+          <circle class="flame-hit" cx="188" cy="28" r="28" fill="transparent"/>
         </g>
       </svg>
     </div>
@@ -532,28 +539,25 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     <p class="say" id="hugSay"></p>
     <div class="hugwrap" id="hugwrap">
       <svg class="fig" id="fig" viewBox="0 0 230 280" aria-hidden="true">
-        <defs><clipPath id="shirt"><path d="M58 280 C 56 204, 72 152, 115 148 C 158 152, 174 204, 172 280 Z"/></clipPath></defs>
+        <defs><clipPath id="shirt"><path d="M60 280 C 58 206, 74 154, 115 150 C 156 154, 172 206, 170 280 Z"/></clipPath></defs>
         <g filter="url(#wobble)"><g class="wholefig">
-          <path d="M103 128 v24 h24 v-24" fill="#f3cfb4" stroke="#2b3350" stroke-width="3"/>
+          <path d="M104 126 v28 h22 v-28" fill="#f0c9ad" stroke="#2b3350" stroke-width="3"/>
           <g class="body">
-            <path d="M58 280 C 56 204, 72 152, 115 148 C 158 152, 174 204, 172 280 Z" fill="#6f96cf"/>
-            <g clip-path="url(#shirt)" stroke="#fff" stroke-width="4" opacity=".92"><path d="M64 140 V280"/><path d="M76 140 V280"/><path d="M88 140 V280"/><path d="M100 140 V280"/><path d="M112 140 V280"/><path d="M124 140 V280"/><path d="M136 140 V280"/><path d="M148 140 V280"/><path d="M160 140 V280"/></g>
-            <path d="M58 280 C 56 204, 72 152, 115 148 C 158 152, 174 204, 172 280 Z" fill="none" stroke="#2b3350" stroke-width="3"/>
-            <path d="M115 166 V280" stroke="#2b3350" stroke-width="1.5" opacity=".5"/>
-            <circle cx="115" cy="186" r="2.6" fill="#2b3350"/><circle cx="115" cy="208" r="2.6" fill="#2b3350"/><circle cx="115" cy="230" r="2.6" fill="#2b3350"/><circle cx="115" cy="252" r="2.6" fill="#2b3350"/>
-            <path d="M100 148 L115 164 L103 173 Z M130 148 L115 164 L127 173 Z" fill="#fff" stroke="#2b3350" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M60 280 C 58 206, 74 154, 115 150 C 156 154, 172 206, 170 280 Z" fill="#6f96cf"/>
+            <g clip-path="url(#shirt)" stroke="#fff" stroke-width="5"><path d="M50 166 H180"/><path d="M50 182 H180"/><path d="M50 198 H180"/><path d="M50 214 H180"/><path d="M50 230 H180"/><path d="M50 246 H180"/><path d="M50 262 H180"/><path d="M50 278 H180"/></g>
+            <path d="M60 280 C 58 206, 74 154, 115 150 C 156 154, 172 206, 170 280 Z" fill="none" stroke="#2b3350" stroke-width="3"/>
+            <path d="M101 151 q14 14 28 0" fill="#f0c9ad" stroke="#2b3350" stroke-width="2.5"/>
           </g>
-          <g class="arm l"><path d="M84 158 q-8 36 -4 64" stroke="#2b3350" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M84 158 q-8 36 -4 64" stroke="#6f96cf" stroke-width="18" stroke-linecap="round" fill="none"/><path d="M84 158 q-8 36 -4 64" stroke="#fff" stroke-width="3" fill="none" opacity=".9"/><circle cx="80" cy="222" r="9" fill="#f3cfb4" stroke="#2b3350" stroke-width="2.5"/></g>
-          <g class="arm r"><path d="M146 158 q8 36 4 64" stroke="#2b3350" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M146 158 q8 36 4 64" stroke="#6f96cf" stroke-width="18" stroke-linecap="round" fill="none"/><path d="M146 158 q8 36 4 64" stroke="#fff" stroke-width="3" fill="none" opacity=".9"/><circle cx="150" cy="222" r="9" fill="#f3cfb4" stroke="#2b3350" stroke-width="2.5"/></g>
+          <g class="arm l"><path d="M84 160 q-8 34 -4 62" stroke="#2b3350" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M84 160 q-8 34 -4 62" stroke="#6f96cf" stroke-width="18" stroke-linecap="round" fill="none"/><circle cx="80" cy="222" r="8.5" fill="#f0c9ad" stroke="#2b3350" stroke-width="2.5"/></g>
+          <g class="arm r"><path d="M146 160 q8 34 4 62" stroke="#2b3350" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M146 160 q8 34 4 62" stroke="#6f96cf" stroke-width="18" stroke-linecap="round" fill="none"/><circle cx="150" cy="222" r="8.5" fill="#f0c9ad" stroke="#2b3350" stroke-width="2.5"/></g>
           <g class="hold"><path d="M115 214 C 97 202, 92 192, 98 185 C 104 178, 113 181, 115 188 C 117 181, 126 178, 132 185 C 138 192, 133 202, 115 214 Z" fill="#d64550" stroke="#2b3350" stroke-width="2.5"/></g>
-          <circle cx="77" cy="100" r="8" fill="#f3cfb4" stroke="#2b3350" stroke-width="2.5"/><circle cx="153" cy="100" r="8" fill="#f3cfb4" stroke="#2b3350" stroke-width="2.5"/>
-          <circle cx="115" cy="96" r="38" fill="#f3cfb4" stroke="#2b3350" stroke-width="3"/>
-          <path d="M86 108 q29 38 58 0 q-2 28 -29 31 q-27 -3 -29 -31z" fill="#2b3350" opacity=".16"/>
-          <path d="M77 94 q-4 -46 38 -47 q42 1 38 47 q-4 -16 -12 -22 q-6 9 -26 8 q-20 -1 -27 -12 q-9 8 -11 26z" fill="#2b3350"/>
-          <path d="M95 88 q7 -4 14 0 M121 88 q7 -4 14 0" stroke="#2b3350" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-          <path d="M97 100 q5 -5 10 0 M123 100 q5 -5 10 0" stroke="#2b3350" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <path d="M104 116 q11 10 22 0" stroke="#2b3350" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <g class="blush"><ellipse cx="93" cy="112" rx="7" ry="4" fill="#d64550" opacity=".5"/><ellipse cx="137" cy="112" rx="7" ry="4" fill="#d64550" opacity=".5"/></g>
+          <circle cx="115" cy="96" r="37" fill="#f0c9ad" stroke="#2b3350" stroke-width="3"/>
+          <path d="M78 96 q0 48 37 50 q37 -2 37 -50 q-5 15 -13 18 q-10 -8 -24 -6 q-14 -2 -24 6 q-8 -3 -13 -18z" fill="#2b3350"/>
+          <path d="M80 90 q-2 -42 35 -43 q37 1 35 43 q-3 -12 -9 -17 q-26 -12 -52 0 q-6 5 -9 17z" fill="#2b3350"/>
+          <path d="M96 86 q7 -4 14 0 M120 86 q7 -4 14 0" stroke="#2b3350" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M98 98 q5 -5 10 0 M122 98 q5 -5 10 0" stroke="#2b3350" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M106 122 q9 7 18 0" stroke="#e79a9a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <g class="blush"><ellipse cx="92" cy="106" rx="6" ry="3.5" fill="#d64550" opacity=".45"/><ellipse cx="138" cy="106" rx="6" ry="3.5" fill="#d64550" opacity=".45"/></g>
         </g></g></svg>
       <svg class="bigheart" id="bigheart" viewBox="0 0 60 56" aria-hidden="true"><path d="M30 52 C 6 36, 0 22, 8 12 C 16 2, 28 6, 30 16 C 32 6, 44 2, 52 12 C 60 22, 54 36, 30 52 Z" fill="#d64550" stroke="#2b3350" stroke-width="3"/></svg>
     </div>
@@ -588,29 +592,26 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       intentos: 3,
       // Minutos que se bloquea tras fallar todos los intentos (0 = nunca se bloquea)
       bloqueoMinutos: 2,
-      pistas: [
-        "Donde todo empezó. En coordenadas.",
-        "Una ciudad italiana, frente a un volcán y famosa por su pizza.",
-        "Nápoles. Empieza por 40.8… y 14.2…"
-      ]
+      // Las pistas solo salen cuando él pulsa "pista"
+      pistas: ["Pizza.", "Margarita.", "Vesubio."]
     },
 
-    // true = cualquier respuesta vale (para probar). Ponlo en false cuando las preguntas estén listas.
-    modoPrueba: true,
-    // PENDIENTE: escribe aquí las preguntas, las respuestas válidas (varias opciones) y dos pistas.
+    // true = cualquier respuesta vale (para probar)
+    modoPrueba: false,
+    // respuestas: se aceptan varias formas (sin importar mayúsculas ni acentos)
     recuerdos: [
-      { p: "¿Qué fue lo primero que pensaste de mí?", respuestas: ["pon aquí la respuesta"], pistas: ["Pista 1 de ejemplo.", "Pista 2 de ejemplo."] },
-      { p: "¿Cuál es nuestra canción?", respuestas: ["pon aquí la respuesta"], pistas: ["Pista 1 de ejemplo.", "Pista 2 de ejemplo."] },
-      { p: "¿Qué nos prometimos la primera vez que nos despedimos?", respuestas: ["pon aquí la respuesta"], pistas: ["Pista 1 de ejemplo.", "Pista 2 de ejemplo."] }
+      { p: "La verdadera tortilla es de…", respuestas: ["maiz", "mais", "corn"], pistas: ["No se te ocurra decir patata.", "Aquí no hay españoles."] },
+      { p: "Un mexicano no puede comer si no hay … en la mesa.", respuestas: ["salsa", "sauce"], pistas: ["Sufrimiento.", "🚽"] },
+      { p: "En la bandera de México hay un águila devorando una…", respuestas: ["serpiente", "vibora", "culebra", "serpent", "snake"], pistas: [] }
     ],
 
-    // true = aparece "prefiero saltarme el juego"
-    juegoSaltable: true,
+    // tras perder este número de veces aparece "no puedo más"
+    saltarTras: 3,
     combate: {
-      vidaJefe: 1700,
-      golpeJefe: [8, 13], cadaMs: 2000, cadaMsFuria: 1450,
-      especial: { cadaMs: 7000, cadaMsFuria: 5500, carga: 2400, dano: 48, nombres: ["Mordisco doble", "Ola del Mar de Huesos", "Rugido abisal"] },
-      pociones: 3, curaPocion: 45, mpMax: 100, mpPorSeg: 7,
+      vidaJefe: 1150,
+      golpeJefe: [5, 9], cadaMs: 2300, cadaMsFuria: 1800,
+      especial: { cadaMs: 8000, cadaMsFuria: 6500, carga: 3200, dano: 30, nombres: ["Mordisco doble", "Ola del Mar de Huesos", "Rugido abisal"] },
+      pociones: 4, curaPocion: 55, mpMax: 100, mpPorSeg: 9,
       clases: [
         { id: "merc", nombre: "Mercenary", desc: "Cuerpo a cuerpo, aguante y golpes brutales.", ic: "sword", col: "#e8828c", vida: 200,
           habilidades: [
@@ -640,11 +641,11 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     },
 
     flores: [
-      "Porque contigo hasta los días malos compilan.",
-      "Por cómo te ríes cuando ganas una partida.",
-      "Porque me haces sentir en casa, estés donde estés.",
-      "Por tu paciencia infinita conmigo.",
-      "Porque desde Nápoles no he dejado de elegirte."
+      "Te siento cerca sin importar la distancia.",
+      "Nunca te olvidas de lo que te digo.",
+      "Me escuchas siempre.",
+      "Me haces sentir en casa, estés donde estés.",
+      "Eres mi lugar seguro."
     ],
 
     fecha: "30 de septiembre de 2026",
@@ -665,23 +666,24 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     next: "toca para seguir",
     lock: {
       tag: "para {nombre} ♥", bar: "sorpresa_30 — terminal",
-      boot: ["$ ./abrir sorpresa_30", "cargando recuerdos… ok", "archivo protegido con el lugar donde empezó todo"],
-      prompt: "introduce las coordenadas (latitud, longitud):", ph: "00.00, 00.00", enter: "enter ↵", attempts: "intentos:",
+      boot: ["$ ./abrir sorpresa_30", "cargando recuerdos… ok"],
+      prompt: "¿dónde empezó todo?", ph: "__.____°N, __.____°E", enter: "↵", enterAria: "entrar", attempts: "intentos:",
+      hint: "? pista", incomplete: "faltan números: completa las coordenadas",
       denied: "✗ acceso denegado · no es ahí", last: "✗ acceso denegado · te queda un intento",
       granted: "✓ acceso concedido", ok: "Nápoles. Ahí empezó todo.", opening: "abriendo sorpresa",
       locked: "⚠ demasiados intentos · sistema bloqueado", retryIn: "reintento en {t}", retry: "listo. inténtalo de nuevo"
     },
-    photo: { say: "¿Quién cumple 30 hoy?", tap: "toca la foto", aria: "Toca la foto", empty: "aquí irá su foto", cap: "¡Tú! Feliz cumpleaños, {nombre}" },
+    photo: { say: "Hoy es un día muy especial.", tap: "toca la foto", aria: "Toca la foto", empty: "aquí irá su foto", cap: "Feliz cumpleaños, {nombre}" },
     q: {
       say: "Antes de seguir, unas preguntas que solo tú sabes.", of: "{n} de {t}", ph: "tu respuesta", aria: "Respuesta",
       hint: "una pista", more: "otra pista", answer: "responder", done: "Lo recuerdas todo.",
-      wrong: ["Mmm, no es eso…", "Casi. Piénsalo un poco.", "¿Te doy una pista?"]
+      wrong: ["Mmm, no es eso…", "Casi. Piénsalo un poco.", "Inténtalo otra vez."]
     },
     game: {
       say: "Sé cuánto te gusta Florensia, así que…", title: "Crubarf ha salido del Mar de Huesos",
       lede: "El monstruo de dos cabezas te espera. Elige tu clase.",
       ledeFight: "{clase}. Cuando cargue un ataque, interrúmpelo con la habilidad amarilla.",
-      skip: "prefiero saltarme el juego →", start: "pulsa una habilidad para empezar",
+      skip: "no puedo más →", start: "pulsa una habilidad para empezar",
       prep: "Crubarf prepara: {n}", interrupt: "¡interrúmpelo!", uses: "Crubarf usa {n}",
       biteL: "la cabeza izquierda te muerde", biteR: "la cabeza derecha te golpea",
       buff: "+50% de daño", buffTag: "+50% daño", shield: "escudo", shieldOf: "escudo de {n}", heal: "+{n} de vida",
@@ -696,7 +698,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     gift: {
       say: "Alguien te ha dejado algo.", say2: "Un ramo para ti.", tap: "tócalo", aria: "Abrir el regalo",
       bouquet: "Ramo de flores", flower: "Abrir flor {n}", intro: "abre cada flor",
-      introText: "Cada una guarda una razón por la que te quiero.", of: "{n} de {t}"
+      introText: "5 razones por las que me haces muy feliz.", of: "{n} de {t}"
     },
     cake: {
       say: "Tu tarta favorita.", aria: "Tarta de fresas con velas", sub: "cierra los ojos y pide un deseo",
@@ -920,6 +922,20 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
   const saveLock = () => { try { localStorage.setItem(KEY, JSON.stringify(lock)); } catch(e){} };
   const heartSVG = `<svg viewBox="0 0 30 28" aria-hidden="true"><g class="h1"><path d="M15 26 C 3 18, 0 11, 4 6 C 8 1, 14 3, 15 8 L13 14 L16 18 Z" fill="#d64550" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/></g><g class="h2"><path d="M15 26 L16 18 L13 14 L15 8 C 16 3, 22 1, 26 6 C 30 11, 27 18, 15 26 Z" fill="#d64550" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/></g></svg>`;
   const termLog = $('#termLog');
+  let hintsShown = 0;
+  $('#pwHintBtn').addEventListener('click', () => {
+    if (hintsShown >= L.pistas.length) return;
+    const d = document.createElement('div'); d.className = 'postit'; d.textContent = L.pistas[hintsShown++]; $('#pwHints').appendChild(d);
+    $('#pwHintBtn').hidden = hintsShown >= L.pistas.length;
+  });
+  // máscara: él solo escribe números y el formato se completa solo
+  const MASK = '##.####°N, ##.####°E', MASK_N = (MASK.match(/#/g) || []).length;
+  function applyMask(digits){
+    let out = '', i = 0;
+    for (const ch of MASK){ if (i >= digits.length && (ch === '#' || i < MASK_N)) break; if (ch === '#') out += digits[i++]; else out += ch; }
+    return out;
+  }
+  $('#pwInput').addEventListener('input', e => { const d = e.target.value.replace(/\D/g, '').slice(0, MASK_N); e.target.value = applyMask(d); });
   function tline(text, cls){ const p = document.createElement('p'); p.className = 'tl ' + (cls || ''); p.textContent = text; termLog.appendChild(p); return p; }
   function typeLine(text, cls, cb){
     const p = tline('', cls + ' cur');
@@ -930,8 +946,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     const left = L.intentos - lock.fails;
     $('#hearts').innerHTML = `<span>${t('lock.attempts')}</span>` + Array.from({length: L.intentos}, (_, i) => `<span class="${i >= left ? 'broken' : ''}">${heartSVG}</span>`).join('');
     $('#hearts').setAttribute('aria-label', t('lock.attempts') + ' ' + Math.max(0, left));
-    $('#pwHints').innerHTML = '';
-    L.pistas.slice(0, Math.min(lock.fails + 1, L.pistas.length)).forEach(p => { const d = document.createElement('div'); d.className = 'postit'; d.textContent = p; $('#pwHints').appendChild(d); });
+    $('#pwHintBtn').hidden = hintsShown >= L.pistas.length;
   }
   function coordsOk(str){
     const nums = (str.match(/\d+(?:[.,]\d+)?/g) || []).map(n => parseFloat(n.replace(',', '.')));
@@ -973,6 +988,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
   $('#pwForm').addEventListener('submit', e => {
     e.preventDefault();
     const inp = $('#pwInput'), val = inp.value.trim(); if (!val) return;
+    if (val.replace(/\D/g, '').length < MASK_N){ tline(t('lock.incomplete'), 'warn'); shake($('.term-line')); return; }
     tline('› ' + val, 'echo'); inp.value = '';
     if (coordsOk(val)){
       lock = { fails: 0, until: 0 }; saveLock(); inp.blur(); $('#pwForm').hidden = true; $('#pwHints').innerHTML = '';
@@ -1056,7 +1072,8 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
   /* ---------- 3 · florensia ---------- */
   const K = CONFIG.combate;
   let cls = null, G = null, rafB = null;
-  $('#skipGame').hidden = !CONFIG.juegoSaltable;
+  let losses = 0;
+  const canSkip = () => losses >= CONFIG.saltarTras;
   $('#skipGame').addEventListener('click', () => show('p-gift'));
   function renderClasses(){
     const box = $('#classPick'); box.innerHTML = '';
@@ -1072,7 +1089,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
   function showPick(){
     stopFight(); cls = null;
     $('#classPick').hidden = false; $('#fightUI').hidden = true; $('#winNote').hidden = true; $('#loseNote').hidden = true; $('#nextGame').hidden = true; $('#gameIntro').hidden = false;
-    $('#skipGame').hidden = !CONFIG.juegoSaltable;
+    $('#skipGame').hidden = !canSkip();
     $('#gameLede').textContent = t('game.lede');
     renderClasses();
   }
@@ -1110,7 +1127,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     G = { t: 0, boss: K.vidaJefe, hp: cls.vida, mp: K.mpMax, cds: cls.habilidades.map(() => 0), potCd: 0, pots: K.pociones,
           nextHit: 2.4, nextSpecial: K.especial.cadaMs/1000, casting: null, stunUntil: 0, buffUntil: 0, shield: 0, dots: [], enraged: false, over: false, started: false };
     $('#classPick').hidden = true; $('#fightUI').hidden = false; $('#winNote').hidden = true; $('#loseNote').hidden = true; $('#cast').hidden = true;
-    $('#skills').hidden = false; $('#log').hidden = false;
+    $('#skills').hidden = false; $('#log').hidden = false; $('#skipGame').hidden = true;
     $('#gameLede').textContent = t('game.ledeFight', { clase: cls.nombre });
     $('#serpent').className = 'serpent'; $('#stage').className = 'stage';
     log(t('game.start')); renderSkills(); ui();
@@ -1205,8 +1222,8 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       $('#serpent').classList.add('dead'); log(t('game.sinks')); burst(...center($('#stage')), 36, 8);
       setTimeout(() => { $('#fightUI').hidden = true; $('#gameIntro').hidden = true; $('#skipGame').hidden = true; $('#winNote').hidden = false; celebrate(); reveal($('#nextGame'), 900); }, 1300);
     } else {
-      log(t('game.dead'));
-      setTimeout(() => { $('#skills').hidden = true; $('#loseNote').hidden = false; }, 700);
+      log(t('game.dead')); losses++;
+      setTimeout(() => { $('#skills').hidden = true; $('#loseNote').hidden = false; $('#skipGame').hidden = !canSkip(); $('#loseNote').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); }, 700);
     }
   }
   starts['p-game'] = () => { showPick(); leaveHooks.push(stopFight); };
