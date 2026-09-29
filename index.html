@@ -74,12 +74,9 @@ body.night #bg rect{filter:url(#paintSoft)}
 @keyframes place{from{opacity:0;transform:translateY(-24px) rotate(-2deg) scale(.98)}to{opacity:1;transform:none}}
 
 /* avanzar tocando la pantalla */
-.tapnext{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom, 0px));z-index:50;appearance:none;cursor:pointer;display:flex;align-items:center;gap:10px;white-space:nowrap;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font:400 1.3rem/1 var(--f-display);padding:11px 20px 11px 16px;border-radius:var(--r-hand);box-shadow:3px 4px 0 var(--shadow);animation:tapin .5s cubic-bezier(.2,1.5,.4,1) both,nudge 1.8s ease-in-out .6s infinite;touch-action:manipulation}
-.tapnext svg{width:24px;height:24px;overflow:visible}
-.tapnext .ring{transform-box:fill-box;transform-origin:center;animation:ring 1.8s ease-out infinite}
-@keyframes tapin{from{opacity:0;transform:translate(-50%,30px) scale(.8)}to{opacity:1;transform:translate(-50%,0)}}
-@keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-5px)}}
-@keyframes ring{from{transform:scale(.4);opacity:1}to{transform:scale(1.4);opacity:0}}
+.tapnext{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom, 0px));z-index:50;appearance:none;cursor:pointer;display:block;white-space:nowrap;border:0;background:none;padding:10px 16px;color:var(--txt-soft);font:700 1.5rem/1 var(--f-script);text-shadow:0 1px 0 var(--bgc),0 -1px 0 var(--bgc),1px 0 0 var(--bgc),-1px 0 0 var(--bgc),0 0 8px var(--bgc);animation:tapin .8s ease both,breathe 2.4s ease-in-out .8s infinite;touch-action:manipulation}
+.tapnext svg{display:none}
+@keyframes tapin{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
 
 /* tipografía */
 .say{margin:0;font:400 2.3rem/1.05 var(--f-display);color:var(--txt);text-align:center;text-wrap:balance;transition:color .8s;text-shadow:0 2px 0 var(--bgc),0 -2px 0 var(--bgc),2px 0 0 var(--bgc),-2px 0 0 var(--bgc)}
@@ -922,11 +919,12 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
   const saveLock = () => { try { localStorage.setItem(KEY, JSON.stringify(lock)); } catch(e){} };
   const heartSVG = `<svg viewBox="0 0 30 28" aria-hidden="true"><g class="h1"><path d="M15 26 C 3 18, 0 11, 4 6 C 8 1, 14 3, 15 8 L13 14 L16 18 Z" fill="#d64550" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/></g><g class="h2"><path d="M15 26 L16 18 L13 14 L15 8 C 16 3, 22 1, 26 6 C 30 11, 27 18, 15 26 Z" fill="#d64550" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/></g></svg>`;
   const termLog = $('#termLog');
-  let hintsShown = 0;
+  let hintsShown = 0, failsTotal = 0;
+  const hintsUnlocked = () => Math.min(Math.max(failsTotal, lock.fails), L.pistas.length);
   $('#pwHintBtn').addEventListener('click', () => {
-    if (hintsShown >= L.pistas.length) return;
+    if (hintsShown >= hintsUnlocked()) return;
     const d = document.createElement('div'); d.className = 'postit'; d.textContent = L.pistas[hintsShown++]; $('#pwHints').appendChild(d);
-    $('#pwHintBtn').hidden = hintsShown >= L.pistas.length;
+    $('#pwHintBtn').hidden = hintsShown >= hintsUnlocked();
   });
   // máscara: él solo escribe números y el formato se completa solo
   const MASK = '##.####°N, ##.####°E', MASK_N = (MASK.match(/#/g) || []).length;
@@ -946,7 +944,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     const left = L.intentos - lock.fails;
     $('#hearts').innerHTML = `<span>${t('lock.attempts')}</span>` + Array.from({length: L.intentos}, (_, i) => `<span class="${i >= left ? 'broken' : ''}">${heartSVG}</span>`).join('');
     $('#hearts').setAttribute('aria-label', t('lock.attempts') + ' ' + Math.max(0, left));
-    $('#pwHintBtn').hidden = hintsShown >= L.pistas.length;
+    $('#pwHintBtn').hidden = hintsShown >= hintsUnlocked();
   }
   function coordsOk(str){
     const nums = (str.match(/\d+(?:[.,]\d+)?/g) || []).map(n => parseFloat(n.replace(',', '.')));
@@ -995,7 +993,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       setTimeout(openSurprise, reduce ? 0 : 250);
       return;
     }
-    lock.fails++;
+    lock.fails++; failsTotal++;
     const left = L.intentos - lock.fails;
     if (left <= 0 && L.bloqueoMinutos > 0){ tline(t('lock.denied'), 'err'); lock.until = Date.now() + L.bloqueoMinutos*60000; saveLock(); renderLock(); setTimeout(showLocked, 500); }
     else {
@@ -1043,12 +1041,13 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
   });
 
   /* ---------- 2 · preguntas ---------- */
-  let qi = 0, qh = 0, miss = 0;
+  let qi = 0, qh = 0, qOpen = 0, miss = 0;
+  const qHintsLeft = () => qh < Math.min(qOpen, (CONFIG.recuerdos[qi].pistas || []).length);
   function renderQ(){
     const R = CONFIG.recuerdos, q = R[qi];
     $('#qn').textContent = t('q.of', { n: qi + 1, t: R.length });
     $('#qText').textContent = q.p; $('#qInput').value = ''; $('#qFb').textContent = ''; $('#qHints').innerHTML = '';
-    qh = 0; $('#qHint').hidden = !(q.pistas && q.pistas.length); $('#qHint').textContent = t('q.hint');
+    qh = 0; qOpen = 0; $('#qHint').hidden = true; $('#qHint').textContent = t('q.hint');
     replay($('#qCard'), 'place .7s cubic-bezier(.2,1.1,.3,1) both');
   }
   starts['p-questions'] = () => { qi = 0; $('#qCard').hidden = false; $('#qDone').hidden = true; $('#nextQ').hidden = true; renderQ(); };
@@ -1061,12 +1060,12 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       qi++;
       if (qi < CONFIG.recuerdos.length) renderQ();
       else { $('#qInput').blur(); $('#qCard').hidden = true; $('#qDone').hidden = false; celebrate(); reveal($('#nextQ'), 900); }
-    } else { const w = TXT.q.wrong; $('#qFb').textContent = w[miss++ % w.length]; shake($('#qInput')); }
+    } else { const w = TXT.q.wrong; $('#qFb').textContent = w[miss++ % w.length]; shake($('#qInput')); qOpen++; $('#qHint').hidden = !qHintsLeft(); }
   });
   $('#qHint').addEventListener('click', () => {
-    const p = CONFIG.recuerdos[qi].pistas || []; if (qh >= p.length) return;
+    const p = CONFIG.recuerdos[qi].pistas || []; if (!qHintsLeft()) return;
     const d = document.createElement('div'); d.className = 'postit'; d.textContent = p[qh++]; $('#qHints').appendChild(d);
-    if (qh >= p.length) $('#qHint').hidden = true; else $('#qHint').textContent = t('q.more');
+    $('#qHint').hidden = !qHintsLeft(); $('#qHint').textContent = t('q.more');
   });
 
   /* ---------- 3 · florensia ---------- */
