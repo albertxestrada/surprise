@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="fr">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#fbf7ef">
 <meta name="robots" content="noindex, nofollow">
-<title>Pour Abdou</title>
+<title>Para Abdou</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Caveat:wght@500;700&family=Patrick+Hand&family=JetBrains+Mono:wght@400;700&display=swap">
@@ -573,16 +573,16 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       // Minutos que se bloquea tras fallar todos los intentos (0 = nunca se bloquea)
       bloqueoMinutos: 2,
       // Las pistas solo salen cuando él pulsa "pista"
-      pistas: ["Pizza.", "Margherita.", "Vésuve."]
+      pistas: ["Pizza.", "Margarita.", "Vesubio."]
     },
 
     // true = cualquier respuesta vale (para probar)
     modoPrueba: false,
     // respuestas: se aceptan varias formas (sin importar mayúsculas ni acentos)
     recuerdos: [
-      { p: "La vraie tortilla est faite de…", respuestas: ["mais", "maiz", "corn"], pistas: ["Ne t’avise pas de dire pomme de terre.", "Ici, pas d’Espagnols."] },
-      { p: "Un Mexicain ne peut pas manger s’il n’y a pas de … sur la table.", respuestas: ["salsa", "sauce"], pistas: ["Souffrance.", "🚽"] },
-      { p: "Combien mesure Tortilla CEO 🌮 ?", respuestas: ["175", "soixantequinze", "setentaycinco"], pistas: [] }
+      { p: "La verdadera tortilla es de…", respuestas: ["maiz", "mais", "corn"], pistas: ["No se te ocurra decir patata.", "Aquí no hay españoles."] },
+      { p: "Un mexicano no puede comer si no hay … en la mesa.", respuestas: ["salsa", "sauce"], pistas: ["Sufrimiento.", "🚽"] },
+      { p: "¿Cuánto mide Tortilla CEO 🌮?", respuestas: ["175", "setentaycinco", "soixantequinze"], pistas: [] }
     ],
 
     // tras perder este número de veces aparece "no puedo más"
@@ -590,28 +590,28 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     combate: {
       vidaJefe: 1150,
       golpeJefe: [5, 9], cadaMs: 2300, cadaMsFuria: 1800,
-      especial: { cadaMs: 8000, cadaMsFuria: 6500, carga: 3200, dano: 30, nombres: ["Double morsure", "Vague de la Mer des Os", "Rugissement abyssal"] },
+      especial: { cadaMs: 8000, cadaMsFuria: 6500, carga: 3200, dano: 30, nombres: ["Mordisco doble", "Ola del Mar de Huesos", "Rugido abisal"] },
       pociones: 4, curaPocion: 55, mpMax: 100, mpPorSeg: 9,
       clases: [
-        { id: "merc", nombre: "Mercenary", desc: "Corps à corps, endurance et coups brutaux.", ic: "sword", col: "#e8828c", vida: 200,
+        { id: "merc", nombre: "Mercenary", desc: "Cuerpo a cuerpo, aguante y golpes brutales.", ic: "sword", col: "#e8828c", vida: 200,
           habilidades: [
             { n: "Warriors Strike", ic: "sword", mp: 10, cd: 1.4, dano: 26, sangrado: 18 },
             { n: "Striking Up", ic: "spark", mp: 15, cd: 6, dano: 14, aturde: true },
             { n: "Warriors Shout", ic: "ring", mp: 25, cd: 25, buff: 1.5, dur: 8 },
             { n: "Cutting Sacrifice", ic: "burst", mp: 30, cd: 16, dano: 160, costeVida: 0.1 } ] },
-        { id: "noble", nombre: "Noble", desc: "Magie élémentaire. Fragile mais dévastateur.", ic: "fire", col: "#9db8e0", vida: 100,
+        { id: "noble", nombre: "Noble", desc: "Magia elemental. Frágil pero devastador.", ic: "fire", col: "#9db8e0", vida: 100,
           habilidades: [
             { n: "Fireball", ic: "fire", mp: 8, cd: 0.9, dano: 32 },
             { n: "Lightning Shock", ic: "bolt", mp: 15, cd: 7, dano: 12, aturde: true },
             { n: "Ice Shield", ic: "snow", mp: 20, cd: 18, escudo: 45 },
             { n: "Heavy Lightning", ic: "bolt", mp: 30, cd: 12, dano: 150 } ] },
-        { id: "saint", nombre: "Saint", desc: "Lumière et ténèbres. Soigne et punit.", ic: "cross", col: "#f2c35b", vida: 115,
+        { id: "saint", nombre: "Saint", desc: "Luz y oscuridad. Cura y castiga.", ic: "cross", col: "#f2c35b", vida: 115,
           habilidades: [
             { n: "Light Transition", ic: "star", mp: 6, cd: 1, dano: 26 },
             { n: "Chains of Light", ic: "chain", mp: 15, cd: 8, dano: 8, aturde: true },
             { n: "Healing Hands", ic: "cross", mp: 18, cd: 5, cura: 40 },
             { n: "Darkness Wave", ic: "moon", mp: 28, cd: 12, dano: 125 } ] },
-        { id: "explorer", nombre: "Explorer", desc: "Armes à feu à distance. Rapide et mortel.", ic: "arrow", col: "#8dbd9b", vida: 105,
+        { id: "explorer", nombre: "Explorer", desc: "Armas de fuego a distancia. Rápido y letal.", ic: "arrow", col: "#8dbd9b", vida: 105,
           habilidades: [
             { n: "Quick Shot", ic: "shot", mp: 6, cd: 0.8, dano: 28 },
             { n: "Burst Shot", ic: "burst", mp: 15, cd: 7, dano: 18, aturde: true },
@@ -621,74 +621,74 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     },
 
     flores: [
-      "Je te sens proche, peu importe la distance.",
-      "Tu n’oublies jamais ce que je te dis.",
-      "Tu m’écoutes toujours.",
-      "Avec toi, je me sens chez moi, où que tu sois.",
-      "Tu es mon refuge."
+      "Te siento cerca sin importar la distancia.",
+      "Nunca te olvidas de lo que te digo.",
+      "Me escuchas siempre.",
+      "Me haces sentir en casa, estés donde estés.",
+      "Eres mi lugar seguro."
     ],
 
-    fecha: "30 septembre 2026",
+    fecha: "30 de septiembre de 2026",
     saludo: "Abdou,",
     carta:
-"Merci d’être toujours présent pour moi, malgré la distance. C’est un plaisir de partager cette année de vie avec toi. Je te souhaite le meilleur : tu me fais sentir l’homme le plus chanceux chaque jour.\n\n" +
-"Joyeux anniversaire. Je t’envoie un câlin virtuel pour l’instant…\n\n" +
-"Profite bien de cette journée, mon amour.",
+"Gracias por estar siempre presente conmigo, a pesar de la distancia. Es un placer compartir este año de vida contigo. Te deseo lo mejor: me haces sentir el hombre más afortunado cada día.\n\n" +
+"Feliz cumpleaños. Te mando un abrazo virtual por ahora…\n\n" +
+"Disfruta mucho este día, mi amor.",
     firma: "Tortilla CEO 🌮",
 
     reencuentro: "2026-10-02T09:00:00+02:00",
-    reencuentroTexto: "Le vrai, je te le fais en personne dans…",
-    reencuentroCuando: "vendredi 2 octobre · 9h00"
+    reencuentroTexto: "El de verdad te lo doy en persona dentro de…",
+    reencuentroCuando: "viernes 2 de octubre · 9:00"
   };
 
   /* Textos de la interfaz (para traducir, basta con cambiar este bloque y CONFIG) */
   const TXT = {
-    next: "touche pour continuer",
+    next: "toca para seguir",
     lock: {
-      tag: "pour {nombre} ♥", bar: "surprise_30 — terminal",
-      boot: ["$ ./ouvrir surprise_30", "chargement des souvenirs… ok"],
-      prompt: "où tout a commencé ?", ph: "__.____°N, __.____°E", enter: "↵", enterAria: "entrer", attempts: "essais :",
-      hint: "? indice", incomplete: "il manque des chiffres : complète les coordonnées",
-      denied: "✗ accès refusé · ce n’est pas là", last: "✗ accès refusé · il te reste un essai",
-      granted: "✓ accès autorisé", ok: "Naples. C’est là que tout a commencé.", opening: "ouverture de la surprise",
-      locked: "⚠ trop d’essais · système bloqué", retryIn: "nouvel essai dans {t}", retry: "prêt. réessaie"
+      tag: "para {nombre} ♥", bar: "sorpresa_30 — terminal",
+      boot: ["$ ./abrir sorpresa_30", "cargando recuerdos… ok"],
+      prompt: "¿dónde empezó todo?", ph: "__.____°N, __.____°E", enter: "↵", enterAria: "entrar", attempts: "intentos:",
+      hint: "? pista", incomplete: "faltan números: completa las coordenadas",
+      denied: "✗ acceso denegado · no es ahí", last: "✗ acceso denegado · te queda un intento",
+      granted: "✓ acceso concedido", ok: "Nápoles. Ahí empezó todo.", opening: "abriendo sorpresa",
+      locked: "⚠ demasiados intentos · sistema bloqueado", retryIn: "reintento en {t}", retry: "listo. inténtalo de nuevo"
     },
-    photo: { say: "Aujourd’hui est un jour très spécial.", tap: "touche la photo", aria: "Touche la photo", empty: "ici, sa photo", cap: "Joyeux anniversaire, {nombre}" },
+    photo: { say: "Hoy es un día muy especial.", tap: "toca la foto", aria: "Toca la foto", empty: "aquí irá su foto", cap: "Feliz cumpleaños, {nombre}" },
     q: {
-      say: "Avant de continuer, quelques questions que toi seul connais.", of: "{n} sur {t}", ph: "ta réponse", aria: "Réponse",
-      hint: "un indice", more: "un autre indice", answer: "répondre", done: "Tu te souviens de tout.",
-      wrong: ["Mmm, ce n’est pas ça…", "Presque. Réfléchis un peu.", "Essaie encore."]
+      say: "Antes de seguir, unas preguntas que solo tú sabes.", of: "{n} de {t}", ph: "tu respuesta", aria: "Respuesta",
+      hint: "una pista", more: "otra pista", answer: "responder", done: "Lo recuerdas todo.",
+      wrong: ["Mmm, no es eso…", "Casi. Piénsalo un poco.", "Inténtalo otra vez."]
     },
     game: {
-      say: "Je sais combien tu aimes Florensia, alors…", title: "Crubarf est sorti de la Mer des Os",
-      lede: "Le monstre à deux têtes t’attend. Choisis ta classe.",
-      ledeFight: "{clase}. Quand il charge une attaque, interromps-le avec la compétence jaune.",
-      skip: "je n’en peux plus →", start: "appuie sur une compétence pour commencer",
-      prep: "Crubarf prépare : {n}", interrupt: "interromps-le !", uses: "Crubarf utilise {n}",
-      biteL: "la tête gauche te mord", biteR: "la tête droite te frappe",
-      buff: "+50 % de dégâts", buffTag: "+50 % dégâts", shield: "bouclier", shieldOf: "bouclier de {n}", heal: "+{n} PV",
-      dots: "dégâts continus ×{n}", stunned: "Crubarf étourdi", fury: "fureur", enrage: "il enrage !",
-      crit: "critique !", critWord: "critique", interrupted: "interrompu !", blocked: "bloqué", noMp: "pas de MP",
-      potion: "Potion", potionLog: "potion : +{n} PV",
-      sinks: "Crubarf sombre dans la mer !", dead: "tu n’as plus de vie",
-      winTitle: "Crubarf est tombé !", winText: "Je savais que tu pouvais. Mais ce n’est pas fini…",
-      loseTitle: "Tu es tombé…", loseText: "Indice : quand Crubarf prépare une attaque, interromps-le avec la compétence jaune.",
-      changeClass: "changer de classe", retry: "encore"
+      say: "Sé cuánto te gusta Florensia, así que…", title: "Crubarf ha salido del Mar de Huesos",
+      lede: "El monstruo de dos cabezas te espera. Elige tu clase.",
+      ledeFight: "{clase}. Cuando cargue un ataque, interrúmpelo con la habilidad amarilla.",
+      skip: "no puedo más →", start: "pulsa una habilidad para empezar",
+      prep: "Crubarf prepara: {n}", interrupt: "¡interrúmpelo!", uses: "Crubarf usa {n}",
+      biteL: "la cabeza izquierda te muerde", biteR: "la cabeza derecha te golpea",
+      buff: "+50% de daño", buffTag: "+50% daño", shield: "escudo", shieldOf: "escudo de {n}", heal: "+{n} de vida",
+      dots: "daño continuo ×{n}", stunned: "Crubarf aturdido", fury: "furia", enrage: "¡se enfurece!",
+      crit: "¡crítico!", critWord: "crítico", interrupted: "¡interrumpido!", blocked: "bloqueado", noMp: "sin MP",
+      potion: "Poción", potionLog: "poción: +{n} de vida",
+      sinks: "¡Crubarf se hunde en el mar!", dead: "te has quedado sin vida",
+      winTitle: "¡Crubarf ha caído!", winText: "Sabía que podías. Pero esto no ha terminado…",
+      loseTitle: "Has caído…", loseText: "Pista: cuando Crubarf prepare un ataque, interrúmpelo con la habilidad amarilla.",
+      changeClass: "cambiar clase", retry: "otra vez"
     },
     gift: {
-      say: "Quelqu’un t’a laissé quelque chose.", say2: "Un bouquet pour toi.", tap: "touche-le", aria: "Ouvrir le cadeau",
-      bouquet: "Bouquet de fleurs", flower: "Ouvrir la fleur {n}", intro: "ouvre chaque fleur",
-      introText: "5 raisons pour lesquelles tu me rends très heureux.", of: "{n} sur {t}"
+      say: "Alguien te ha dejado algo.", say2: "Un ramo para ti.", tap: "tócalo", aria: "Abrir el regalo",
+      bouquet: "Ramo de flores", flower: "Abrir flor {n}", intro: "abre cada flor",
+      introText: "5 razones por las que me haces muy feliz.", of: "{n} de {t}"
     },
     cake: {
-      say: "Ta tarte préférée.", aria: "Tarte aux fraises avec des bougies", sub: "ferme les yeux et fais un vœu",
-      wish: "j’ai fait mon vœu", blowHint: "maintenant souffle : passe le doigt sur les flammes",
-      blow: "souffler les bougies", done: "qu’il se réalise ♥"
+      say: "Tu tarta favorita.", aria: "Tarta de fresas con velas", sub: "cierra los ojos y pide un deseo",
+      wish: "ya he pedido mi deseo", blowHint: "ahora sopla: pasa el dedo por las llamas",
+      blow: "soplar las velas", done: "que se cumpla ♥"
     },
-    letter: { aria: "Lettre", tap: "touche la lettre pour la lire d’un coup", today: "aujourd’hui même", minutes: "dans quelques minutes", hour: "dans 1 heure", hours: "dans {n} heures" },
+    letter: { aria: "Carta", tap: "toca la carta para leerla de golpe", today: "hoy mismo", minutes: "en unos minutos", hour: "en 1 hora", hours: "en {n} horas" },
     hug: {
-      say: "Je t’envoie un câlin…", today: "On se voit aujourd’hui !", days: "jours", hours: "heures", min: "min", sec: "sec",
-      foot: "fait avec beaucoup d’amour ♥", replay: "revenir au début"
+      say: "Te mando un abrazo…", today: "¡Hoy nos vemos!", days: "días", hours: "horas", min: "min", sec: "seg",
+      foot: "hecho con mucho cariño ♥", replay: "volver al principio"
     }
   };
   /* ================================================================ */
