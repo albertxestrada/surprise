@@ -68,16 +68,18 @@ body.night #bg rect{filter:url(#paintSoft)}
 @keyframes boil{0%{transform:rotate(0)}33%{transform:rotate(1.2deg) translate(.4px,-.4px)}66%{transform:rotate(-.8deg) translate(-.4px,.4px)}}
 
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
-.app{position:relative;z-index:1;overflow-x:hidden;overflow-x:clip;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:18px 16px 40px;padding-top:max(18px,env(safe-area-inset-top))}
+.app{position:relative;z-index:1;overflow-x:hidden;overflow-x:clip;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:18px 16px 110px;padding-top:max(18px,env(safe-area-inset-top))}
 .page{width:100%;max-width:420px;display:flex;flex-direction:column;gap:18px;align-items:stretch}
-.page.in{animation:place .8s cubic-bezier(.2,1.1,.3,1) both}
+.page.in{animation:place .8s cubic-bezier(.2,1.1,.3,1) backwards}
 @keyframes place{from{opacity:0;transform:translateY(-24px) rotate(-2deg) scale(.98)}to{opacity:1;transform:none}}
 
-/* progreso: siete puntitos a tinta */
-.prog{display:flex;gap:10px;justify-content:center;margin:2px 0 16px;min-height:12px}
-.prog i{width:11px;height:11px;border:2px solid var(--txt);background:var(--bgc);border-radius:60% 40% 55% 45%/45% 55% 45% 55%;opacity:.8;transition:background .4s,opacity .4s,transform .4s}
-.prog i.done{background:var(--txt);opacity:.6}
-.prog i.now{background:var(--yellow);opacity:1;transform:scale(1.25) rotate(12deg)}
+/* avanzar tocando la pantalla */
+.tapnext{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom, 0px));z-index:50;appearance:none;cursor:pointer;display:flex;align-items:center;gap:10px;white-space:nowrap;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font:400 1.3rem/1 var(--f-display);padding:11px 20px 11px 16px;border-radius:var(--r-hand);box-shadow:3px 4px 0 var(--shadow);animation:tapin .5s cubic-bezier(.2,1.5,.4,1) both,nudge 1.8s ease-in-out .6s infinite;touch-action:manipulation}
+.tapnext svg{width:24px;height:24px;overflow:visible}
+.tapnext .ring{transform-box:fill-box;transform-origin:center;animation:ring 1.8s ease-out infinite}
+@keyframes tapin{from{opacity:0;transform:translate(-50%,30px) scale(.8)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-5px)}}
+@keyframes ring{from{transform:scale(.4);opacity:1}to{transform:scale(1.4);opacity:0}}
 
 /* tipografía */
 .say{margin:0;font:400 2.3rem/1.05 var(--f-display);color:var(--txt);text-align:center;text-wrap:balance;transition:color .8s;text-shadow:0 2px 0 var(--bgc),0 -2px 0 var(--bgc),2px 0 0 var(--bgc),-2px 0 0 var(--bgc)}
@@ -322,6 +324,8 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
 .fig .wholefig{animation:idle 2.2s ease-in-out infinite}
 @keyframes idle{50%{transform:translateY(-4px)}}
 .fig .blush{opacity:0;transition:opacity .6s}
+.fig .hold{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .6s cubic-bezier(.3,1.6,.5,1),opacity .4s}
+.fig.squeeze .hold,.fig.given .hold{opacity:1;transform:scale(1)}
 .fig.squeeze .blush{opacity:.8}
 .bigheart{position:absolute;left:50%;top:48%;width:60px;margin-left:-30px;margin-top:-30px;opacity:0;pointer-events:none;z-index:5}
 .bigheart.fly{animation:fly 1.6s cubic-bezier(.5,0,.3,1) forwards}
@@ -372,7 +376,6 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <div class="app">
-  <nav class="prog" id="prog" aria-hidden="true"></nav>
 
   <!-- 0 · candado -->
   <section class="page" id="p-lock">
@@ -404,7 +407,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       <div class="hat" id="hat"></div>
     </div>
     <p class="tap" id="tapHint" data-t="photo.tap"></p>
-    <button class="btn next" type="button" data-next="p-questions" hidden id="nextPhoto" data-t="next"></button>
+    <button class="tapnext" type="button" data-next="p-questions" hidden id="nextPhoto"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="#f2c35b" stroke="currentColor" stroke-width="2"/></svg><span data-t="next"></span></button>
   </section>
 
   <!-- 2 · preguntas -->
@@ -421,7 +424,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       </form>
     </div>
     <p class="say small" id="qDone" hidden data-t="q.done"></p>
-    <button class="btn next" type="button" data-next="p-game" hidden id="nextQ" data-t="next"></button>
+    <button class="tapnext" type="button" data-next="p-game" hidden id="nextQ"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="#f2c35b" stroke="currentColor" stroke-width="2"/></svg><span data-t="next"></span></button>
   </section>
 
   <!-- 3 · florensia -->
@@ -459,7 +462,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     <div class="note" id="winNote" hidden><h3 data-t="game.winTitle"></h3><p data-t="game.winText"></p></div>
     <div class="note r" id="loseNote" hidden><h3 data-t="game.loseTitle"></h3><p data-t="game.loseText"></p><div class="row" style="margin-top:10px"><button class="link" type="button" id="changeClass" data-t="game.changeClass"></button><button class="btn" type="button" id="retry" data-t="game.retry"></button></div></div>
     <button class="link quiet skip" type="button" id="skipGame" data-t="game.skip"></button>
-    <button class="btn next" type="button" data-next="p-gift" hidden id="nextGame" data-t="next"></button>
+    <button class="tapnext" type="button" data-next="p-gift" hidden id="nextGame"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="#f2c35b" stroke="currentColor" stroke-width="2"/></svg><span data-t="next"></span></button>
   </section>
 
   <!-- 4 · regalo + flores -->
@@ -474,7 +477,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     <p class="tap" id="giftTap" data-t="gift.tap"></p>
     <div class="garden" id="garden" hidden><svg id="gardenSvg" viewBox="0 0 300 290" role="img"></svg></div>
     <div class="note r reason" id="reason" hidden aria-live="polite"><small id="reasonN"></small><p id="reasonT"></p></div>
-    <button class="btn next" type="button" data-next="p-cake" hidden id="nextGift" data-t="next"></button>
+    <button class="tapnext" type="button" data-next="p-cake" hidden id="nextGift"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="#f2c35b" stroke="currentColor" stroke-width="2"/></svg><span data-t="next"></span></button>
   </section>
 
   <!-- 5 · tarta -->
@@ -490,28 +493,26 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
         </defs>
         <g id="tart" filter="url(#wobble)"></g>
         <g class="candle" id="c3">
-          <circle class="fglow" cx="132" cy="44" r="32" fill="url(#glow)"/>
-          <g filter="url(#wobble)"><rect x="124" y="58" width="16" height="66" rx="4" fill="#fff" stroke="#2b3350" stroke-width="2.5"/><path d="M124 68 l16 -8 M124 84 l16 -8 M124 100 l16 -8 M124 116 l16 -8" stroke="#eb9ab2" stroke-width="5"/>
-          <text x="132" y="146" text-anchor="middle" font-family="Caveat Brush, cursive" font-size="30" fill="#2b3350">3</text></g>
-          <path d="M132 48 v10" stroke="#2b3350" stroke-width="2.5"/>
-          <path class="flame" d="M132 22 C 141 34, 141 44, 132 50 C 123 44, 123 34, 132 22 Z" fill="url(#fg)" stroke="#e3a93e" stroke-width="1"/>
-          <circle class="smoke" cx="132" cy="42" r="7" fill="#c9ccd6"/>
-          <circle class="flame-hit" cx="132" cy="40" r="28" fill="transparent"/>
+          <circle class="fglow" cx="132" cy="36" r="32" fill="url(#glow)"/>
+          <g filter="url(#wobble)"><path d="M116 80 Q 130 64 146 76 Q 154 90 134 102 Q 156 110 148 128 Q 134 146 114 132" stroke="#2b3350" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M116 80 Q 130 64 146 76 Q 154 90 134 102 Q 156 110 148 128 Q 134 146 114 132" stroke="#fffcf5" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M116 80 Q 130 64 146 76 Q 154 90 134 102 Q 156 110 148 128 Q 134 146 114 132" stroke="#eb9ab2" stroke-width="17" fill="none" stroke-dasharray="6 7"/><path d="M116 80 Q 130 64 146 76 Q 154 90 134 102 Q 156 110 148 128 Q 134 146 114 132" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7" transform="translate(-3 -3)"/></g>
+          <path d="M132 46 v14" stroke="#2b3350" stroke-width="2.5" stroke-linecap="round"/>
+          <path class="flame" d="M132 20 C 141 32, 141 42, 132 48 C 123 42, 123 32, 132 20 Z" fill="url(#fg)" stroke="#e3a93e" stroke-width="1"/>
+          <circle class="smoke" cx="132" cy="40" r="7" fill="#c9ccd6"/>
+          <circle class="flame-hit" cx="132" cy="38" r="28" fill="transparent"/>
         </g>
         <g class="candle" id="c0">
-          <circle class="fglow" cx="188" cy="44" r="32" fill="url(#glow)"/>
-          <g filter="url(#wobble)"><rect x="180" y="58" width="16" height="66" rx="4" fill="#fff" stroke="#2b3350" stroke-width="2.5"/><path d="M180 68 l16 -8 M180 84 l16 -8 M180 100 l16 -8 M180 116 l16 -8" stroke="#9db8e0" stroke-width="5"/>
-          <text x="188" y="146" text-anchor="middle" font-family="Caveat Brush, cursive" font-size="30" fill="#2b3350">0</text></g>
-          <path d="M188 48 v10" stroke="#2b3350" stroke-width="2.5"/>
-          <path class="flame" d="M188 22 C 197 34, 197 44, 188 50 C 179 44, 179 34, 188 22 Z" fill="url(#fg)" stroke="#e3a93e" stroke-width="1"/>
-          <circle class="smoke" cx="188" cy="42" r="7" fill="#c9ccd6"/>
-          <circle class="flame-hit" cx="188" cy="40" r="28" fill="transparent"/>
+          <circle class="fglow" cx="188" cy="36" r="32" fill="url(#glow)"/>
+          <g filter="url(#wobble)"><path d="M188 77 C 206 77, 206 133, 188 133 C 170 133, 170 77, 188 77 Z" stroke="#2b3350" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M188 77 C 206 77, 206 133, 188 133 C 170 133, 170 77, 188 77 Z" stroke="#fffcf5" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M188 77 C 206 77, 206 133, 188 133 C 170 133, 170 77, 188 77 Z" stroke="#9db8e0" stroke-width="17" fill="none" stroke-dasharray="6 7"/><path d="M188 77 C 206 77, 206 133, 188 133 C 170 133, 170 77, 188 77 Z" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7" transform="translate(-3 -3)"/></g>
+          <path d="M188 46 v20" stroke="#2b3350" stroke-width="2.5" stroke-linecap="round"/>
+          <path class="flame" d="M188 20 C 197 32, 197 42, 188 48 C 179 42, 179 32, 188 20 Z" fill="url(#fg)" stroke="#e3a93e" stroke-width="1"/>
+          <circle class="smoke" cx="188" cy="40" r="7" fill="#c9ccd6"/>
+          <circle class="flame-hit" cx="188" cy="38" r="28" fill="transparent"/>
         </g>
       </svg>
     </div>
     <button class="btn wide rose" type="button" id="wishBtn" data-t="cake.wish"></button>
     <button class="btn wide blue" type="button" id="blowBtn" hidden data-t="cake.blow"></button>
-    <button class="btn next" type="button" data-next="p-letter" hidden id="nextCake" data-t="next"></button>
+    <button class="tapnext" type="button" data-next="p-letter" hidden id="nextCake"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="#f2c35b" stroke="currentColor" stroke-width="2"/></svg><span data-t="next"></span></button>
   </section>
 
   <!-- 6 · carta -->
@@ -523,25 +524,37 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       <p class="sign" id="lSign"></p>
     </article>
     <p class="tap" id="letterTap" data-t="letter.tap"></p>
-    <button class="btn next" type="button" data-next="p-hug" hidden id="nextLetter" data-t="next"></button>
+    <button class="tapnext" type="button" data-next="p-hug" hidden id="nextLetter"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="ring" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" fill="#f2c35b" stroke="currentColor" stroke-width="2"/></svg><span data-t="next"></span></button>
   </section>
 
   <!-- 7 · abrazo -->
   <section class="page" id="p-hug" hidden>
     <p class="say" id="hugSay"></p>
     <div class="hugwrap" id="hugwrap">
-      <svg class="fig" id="fig" viewBox="0 0 230 280" aria-hidden="true"><g filter="url(#wobble)">
-        <g class="wholefig">
-          <g class="body"><path d="M70 280 C 64 190, 80 138, 115 138 C 150 138, 166 190, 160 280 Z" fill="#eb9ab2" stroke="#2b3350" stroke-width="3"/><path d="M104 180 q11 -12 22 0 q-11 18 -22 0z" fill="#fff" opacity=".85"/></g>
-          <g class="arm l"><path d="M82 150 q-6 40 -2 70" stroke="#2b3350" stroke-width="22" stroke-linecap="round" fill="none"/><path d="M82 150 q-6 40 -2 70" stroke="#eb9ab2" stroke-width="16" stroke-linecap="round" fill="none"/></g>
-          <g class="arm r"><path d="M148 150 q6 40 2 70" stroke="#2b3350" stroke-width="22" stroke-linecap="round" fill="none"/><path d="M148 150 q6 40 2 70" stroke="#eb9ab2" stroke-width="16" stroke-linecap="round" fill="none"/></g>
-          <circle cx="115" cy="98" r="40" fill="#ffdcc6" stroke="#2b3350" stroke-width="3"/>
-          <path d="M78 88 q10 -38 40 -32 q30 2 36 30 q-14 -14 -38 -12 q-22 0 -38 14z" fill="#2b3350"/>
-          <path d="M98 100 q5 -5 10 0 M122 100 q5 -5 10 0" stroke="#2b3350" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <svg class="fig" id="fig" viewBox="0 0 230 280" aria-hidden="true">
+        <defs><clipPath id="shirt"><path d="M58 280 C 56 204, 72 152, 115 148 C 158 152, 174 204, 172 280 Z"/></clipPath></defs>
+        <g filter="url(#wobble)"><g class="wholefig">
+          <path d="M103 128 v24 h24 v-24" fill="#f3cfb4" stroke="#2b3350" stroke-width="3"/>
+          <g class="body">
+            <path d="M58 280 C 56 204, 72 152, 115 148 C 158 152, 174 204, 172 280 Z" fill="#6f96cf"/>
+            <g clip-path="url(#shirt)" stroke="#fff" stroke-width="4" opacity=".92"><path d="M64 140 V280"/><path d="M76 140 V280"/><path d="M88 140 V280"/><path d="M100 140 V280"/><path d="M112 140 V280"/><path d="M124 140 V280"/><path d="M136 140 V280"/><path d="M148 140 V280"/><path d="M160 140 V280"/></g>
+            <path d="M58 280 C 56 204, 72 152, 115 148 C 158 152, 174 204, 172 280 Z" fill="none" stroke="#2b3350" stroke-width="3"/>
+            <path d="M115 166 V280" stroke="#2b3350" stroke-width="1.5" opacity=".5"/>
+            <circle cx="115" cy="186" r="2.6" fill="#2b3350"/><circle cx="115" cy="208" r="2.6" fill="#2b3350"/><circle cx="115" cy="230" r="2.6" fill="#2b3350"/><circle cx="115" cy="252" r="2.6" fill="#2b3350"/>
+            <path d="M100 148 L115 164 L103 173 Z M130 148 L115 164 L127 173 Z" fill="#fff" stroke="#2b3350" stroke-width="2.5" stroke-linejoin="round"/>
+          </g>
+          <g class="arm l"><path d="M84 158 q-8 36 -4 64" stroke="#2b3350" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M84 158 q-8 36 -4 64" stroke="#6f96cf" stroke-width="18" stroke-linecap="round" fill="none"/><path d="M84 158 q-8 36 -4 64" stroke="#fff" stroke-width="3" fill="none" opacity=".9"/><circle cx="80" cy="222" r="9" fill="#f3cfb4" stroke="#2b3350" stroke-width="2.5"/></g>
+          <g class="arm r"><path d="M146 158 q8 36 4 64" stroke="#2b3350" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M146 158 q8 36 4 64" stroke="#6f96cf" stroke-width="18" stroke-linecap="round" fill="none"/><path d="M146 158 q8 36 4 64" stroke="#fff" stroke-width="3" fill="none" opacity=".9"/><circle cx="150" cy="222" r="9" fill="#f3cfb4" stroke="#2b3350" stroke-width="2.5"/></g>
+          <g class="hold"><path d="M115 214 C 97 202, 92 192, 98 185 C 104 178, 113 181, 115 188 C 117 181, 126 178, 132 185 C 138 192, 133 202, 115 214 Z" fill="#d64550" stroke="#2b3350" stroke-width="2.5"/></g>
+          <circle cx="77" cy="100" r="8" fill="#f3cfb4" stroke="#2b3350" stroke-width="2.5"/><circle cx="153" cy="100" r="8" fill="#f3cfb4" stroke="#2b3350" stroke-width="2.5"/>
+          <circle cx="115" cy="96" r="38" fill="#f3cfb4" stroke="#2b3350" stroke-width="3"/>
+          <path d="M86 108 q29 38 58 0 q-2 28 -29 31 q-27 -3 -29 -31z" fill="#2b3350" opacity=".16"/>
+          <path d="M77 94 q-4 -46 38 -47 q42 1 38 47 q-4 -16 -12 -22 q-6 9 -26 8 q-20 -1 -27 -12 q-9 8 -11 26z" fill="#2b3350"/>
+          <path d="M95 88 q7 -4 14 0 M121 88 q7 -4 14 0" stroke="#2b3350" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M97 100 q5 -5 10 0 M123 100 q5 -5 10 0" stroke="#2b3350" stroke-width="3" fill="none" stroke-linecap="round"/>
           <path d="M104 116 q11 10 22 0" stroke="#2b3350" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <g class="blush"><ellipse cx="94" cy="114" rx="7" ry="4" fill="#d64550" opacity=".6"/><ellipse cx="136" cy="114" rx="7" ry="4" fill="#d64550" opacity=".6"/></g>
-        </g>
-      </g></svg>
+          <g class="blush"><ellipse cx="93" cy="112" rx="7" ry="4" fill="#d64550" opacity=".5"/><ellipse cx="137" cy="112" rx="7" ry="4" fill="#d64550" opacity=".5"/></g>
+        </g></g></svg>
       <svg class="bigheart" id="bigheart" viewBox="0 0 60 56" aria-hidden="true"><path d="M30 52 C 6 36, 0 22, 8 12 C 16 2, 28 6, 30 16 C 32 6, 44 2, 52 12 C 60 22, 54 36, 30 52 Z" fill="#d64550" stroke="#2b3350" stroke-width="3"/></svg>
     </div>
     <div class="after" id="after" hidden>
@@ -638,9 +651,9 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     saludo: "Abdou,",
     carta:
 "Gracias por estar siempre presente conmigo, a pesar de la distancia. Es un placer compartir este año de vida contigo. Te deseo lo mejor: me haces sentir el hombre más afortunado cada día.\n\n" +
-"Feliz cumpleaños. Te mando un abrazo virtual por ahora, pero {cuando} te lo podré dar en persona.\n\n" +
+"Feliz cumpleaños. Te mando un abrazo virtual por ahora…\n\n" +
 "Disfruta mucho este día, mi amor.",
-    firma: "Tu programador favorito ♥",
+    firma: "Tortilla CEO 🌮",
 
     reencuentro: "2026-10-02T09:00:00+02:00",
     reencuentroTexto: "El de verdad te lo doy en persona dentro de…",
@@ -649,7 +662,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
 
   /* Textos de la interfaz (para traducir, basta con cambiar este bloque y CONFIG) */
   const TXT = {
-    next: "sigue →",
+    next: "toca para seguir",
     lock: {
       tag: "para {nombre} ♥", bar: "sorpresa_30 — terminal",
       boot: ["$ ./abrir sorpresa_30", "cargando recuerdos… ok", "archivo protegido con el lugar donde empezó todo"],
@@ -693,7 +706,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     letter: { aria: "Carta", tap: "toca la carta para leerla de golpe", today: "hoy mismo", minutes: "en unos minutos", hour: "en 1 hora", hours: "en {n} horas" },
     hug: {
       say: "Te mando un abrazo…", today: "¡Hoy nos vemos!", days: "días", hours: "horas", min: "min", sec: "seg",
-      foot: "hecho a mano, desde mi corazón ♥", replay: "volver al principio"
+      foot: "hecho con mucho cariño ♥", replay: "volver al principio"
     }
   };
   /* ================================================================ */
@@ -853,7 +866,6 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
   /* ---------- páginas ---------- */
   const pages = $$('.page'), starts = {};
   const CHAPTERS = ['p-photo', 'p-questions', 'p-game', 'p-gift', 'p-cake', 'p-letter', 'p-hug'];
-  $('#prog').innerHTML = CHAPTERS.map(() => '<i></i>').join('');
   let leaveHooks = [];
   function writeSay(root){
     let delay = 150;
@@ -877,11 +889,10 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     const k = CHAPTERS.indexOf(id);
     drawShapes(ch, k);
     setTimeout(paintChecks, 1300);   // refresca el patrón al terminar la transición (Safari)
-    $('#prog').style.visibility = k < 0 ? 'hidden' : 'visible';
-    $$('#prog i').forEach((d, i) => { d.className = i < k ? 'done' : i === k ? 'now' : ''; });
   }
   function show(id){
     leaveHooks.forEach(f => f()); leaveHooks = [];
+    $$('.tapnext').forEach(x => { x.hidden = true; delete x.dataset.ready; });
     pages.forEach(p => { p.hidden = p.id !== id; p.classList.remove('in'); });
     const el = document.getElementById(id); void el.offsetWidth; el.classList.add('in');
     setChapter(id);
@@ -889,8 +900,18 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
     const wait = writeSay(el);
     (starts[id] || (() => {}))(wait);
   }
-  document.addEventListener('click', e => { const n = e.target.closest('[data-next]'); if (n) show(n.dataset.next); });
-  const reveal = (el, ms) => setTimeout(() => { el.hidden = false; }, reduce ? 0 : (ms || 0));
+  // cuando aparece "toca para seguir", cualquier toque en la pantalla avanza
+  const INTERACTIVE = 'input,.skill,.cls,.flower-hit,.flame-hit,#wishBtn,#blowBtn,#retry,#changeClass,#skipGame,#qHint,#replay,.term-go,#gift';
+  document.addEventListener('click', e => {
+    const n = e.target.closest('[data-next]');
+    const cur = pages.find(p => !p.hidden);
+    const tn = n || (!e.target.closest(INTERACTIVE) && cur && cur.querySelector('.tapnext:not([hidden])'));
+    if (tn && tn.dataset.ready) show(tn.dataset.next);
+  });
+  const reveal = (el, ms) => setTimeout(() => {
+    el.hidden = false;
+    if (el.classList.contains('tapnext')){ delete el.dataset.ready; setTimeout(() => { if (!el.hidden) el.dataset.ready = '1'; }, reduce ? 0 : 600); }
+  }, reduce ? 0 : (ms || 0));
 
   /* ---------- 0 · candado ---------- */
   const L = CONFIG.login, KEY = 'para-abdou-lock';
@@ -1306,7 +1327,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
   starts['p-hug'] = () => {
     hugTimers.forEach(clearTimeout); hugTimers = [];
     const fig = $('#fig'), heart = $('#bigheart'), say = $('#hugSay');
-    fig.classList.remove('open', 'squeeze'); heart.classList.remove('fly'); $('#after').hidden = true; $('#count').hidden = false;
+    fig.classList.remove('open', 'squeeze', 'given'); heart.classList.remove('fly'); $('#after').hidden = true; $('#count').hidden = false;
     say.dataset.say = ''; say.textContent = '';
     const T = (ms, f) => hugTimers.push(setTimeout(f, reduce ? 0 : ms));
     T(700, () => fig.classList.add('open'));
@@ -1326,7 +1347,7 @@ body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
       };
       upd(); clearInterval(cdT); cdT = setInterval(upd, 1000);
     });
-    T(6200, () => fig.classList.remove('squeeze'));
+    T(6200, () => { fig.classList.remove('squeeze'); fig.classList.add('given'); });
     leaveHooks.push(() => { hugTimers.forEach(clearTimeout); clearInterval(cdT); });
   };
   $('#replay').addEventListener('click', () => show('p-photo'));
