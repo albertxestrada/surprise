@@ -8,13 +8,13 @@
 <title>Para Abdou</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Caveat:wght@500;700&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Caveat:wght@500;700&family=Patrick+Hand&family=JetBrains+Mono:wght@400;700&display=swap">
 <style>
 /* Un cuaderno hecho a mano: papel, tinta azul marino y acuarela.
    Cada capítulo tiñe el fondo de un color y dibuja sus propios garabatos. */
-@property --wa{syntax:'<color>';inherits:true;initial-value:#cddcf2}
-@property --wb{syntax:'<color>';inherits:true;initial-value:#f6e3b0}
-@property --bgc{syntax:'<color>';inherits:true;initial-value:#fbf7ef}
+@property --ck{syntax:'<color>';inherits:true;initial-value:#9dbbe3}
+@property --ck2{syntax:'<color>';inherits:true;initial-value:#7aa0d6}
+@property --bgc{syntax:'<color>';inherits:true;initial-value:#faf3e4}
 :root{
   --paper:#fffcf5;
   --ink:#2b3350;
@@ -29,6 +29,7 @@
   --shadow:rgba(43,51,80,.14);
   --f-display:"Caveat Brush","Caveat","Segoe Print","Bradley Hand",cursive;
   --f-script:"Caveat","Segoe Print","Bradley Hand",cursive;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
   --f-hand:"Patrick Hand","Segoe Print","Bradley Hand","Comic Sans MS",cursive;
   --r-hand:255px 18px 225px 18px/18px 225px 18px 255px;
   --r-hand-2:18px 225px 18px 255px/255px 18px 225px 18px;
@@ -41,33 +42,29 @@ body{
   --txt:var(--ink);--txt-soft:var(--ink-soft);
   background:var(--bgc);color:var(--ink);font-family:var(--f-hand);font-size:19px;line-height:1.4;
   -webkit-tap-highlight-color:transparent;
-  transition:--wa 1.6s ease,--wb 1.6s ease,--bgc 1.2s ease;
+  transition:--ck 1.2s ease,--ck2 1.2s ease,--bgc 1.2s ease;
 }
-/* temas de cada capítulo */
-body[data-ch="lock"]{--wa:#cddcf2;--wb:#f6e3b0}
-body[data-ch="photo"]{--wa:#f6dca4;--wb:#f4c9d6}
-body[data-ch="questions"]{--wa:#dcd6f0;--wb:#cfe1f3}
-body[data-ch="game"]{--wa:#b9d0ee;--wb:#cce6d6}
-body[data-ch="gift"]{--wa:#f4c9d8;--wb:#d3e7cf}
-body[data-ch="cake"]{--wa:#f7d8bb;--wb:#f5e6b2}
-body[data-ch="letter"]{--wa:#ece2cc;--wb:#dde8f5}
-body[data-ch="hug"]{--wa:#f4c6d4;--wb:#f7e0b4}
-body.night{--bgc:#1d2338;--wa:#2b3558;--wb:#3a3462;--txt:#f7eedb;--txt-soft:#c9c6d8}
+/* temas de cada capítulo: los cuadros cambian de color */
+body[data-ch="lock"]{--bgc:#161b2e;--ck:#161b2e;--ck2:#161b2e;--txt:#f7eedb;--txt-soft:#8e95b3}
+body[data-ch="lock"] :is(#bg,#shapes){opacity:0}
+body[data-ch="photo"]{--ck:#9dbbe3;--ck2:#7aa0d6}
+body[data-ch="questions"]{--ck:#b9cdea;--ck2:#93b0dc}
+body[data-ch="game"]{--ck:#8fb3dc;--ck2:#6c94cb}
+body[data-ch="gift"]{--ck:#f1b5c8;--ck2:#e094ad}
+body[data-ch="cake"]{--ck:#f5c89c;--ck2:#e5aa74}
+body[data-ch="letter"]{--ck:#f3cf82;--ck2:#e2b257}
+body[data-ch="hug"]{--ck:#f1b5c8;--ck2:#e094ad}
+body.night{--bgc:#1d2338;--ck:#34406a;--ck2:#46558a;--txt:#f7eedb;--txt-soft:#d3d0e0}
 
-/* fondo: dos manchas de acuarela + grano de papel */
-#bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-#bg .wash{position:absolute;width:78vmax;height:66vmax;opacity:.7;mix-blend-mode:multiply;filter:blur(6px);animation:drift 26s ease-in-out infinite alternate}
-#bg .wash.a{left:-34vmax;top:-26vmax;background:radial-gradient(closest-side,var(--wa) 62%,transparent);border-radius:42% 58% 63% 37%/45% 40% 60% 55%}
-#bg .wash.b{right:-36vmax;bottom:-30vmax;background:radial-gradient(closest-side,var(--wb) 60%,transparent);border-radius:58% 42% 38% 62%/52% 60% 40% 48%;animation-delay:-13s}
-body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
-@keyframes drift{to{transform:translate(4vmax,3vmax) rotate(8deg) scale(1.06)}}
-#bg .grain{position:absolute;inset:0;opacity:.55;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .2 0 0 0 0 .31 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-#doodles{position:fixed;inset:0;z-index:0;pointer-events:none}
-.dd{position:absolute;color:var(--txt);opacity:.26;transition:opacity .6s}
-.dd.bye{opacity:0}
-.dd svg{display:block;width:100%;height:auto;overflow:visible;animation:boil .9s steps(1) infinite}
-.dd path{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.6s ease-out forwards}
-@keyframes draw{to{stroke-dashoffset:0}}
+/* fondo: cuadros de acuarela + figuras que crecen y respiran */
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;transition:opacity 1.2s}
+body.night #bg rect{filter:url(#paintSoft)}
+#shapes{position:fixed;inset:0;z-index:0;pointer-events:none;transition:opacity 1.2s}
+.shp{position:absolute;display:block;animation:stick .7s cubic-bezier(.2,1.6,.4,1) both;transition:opacity .5s,transform .5s}
+.shp.bye{opacity:0;transform:scale(.2) rotate(40deg)!important;animation:none}
+.shp .grow{display:block;animation:grow var(--gd,7s) ease-in-out var(--gdl,0s) infinite alternate}
+.shp svg{display:block;width:100%;height:auto;overflow:visible;animation:boil .8s steps(1) infinite}
+@keyframes grow{from{transform:scale(.65) rotate(-10deg)}to{transform:scale(1.35) rotate(12deg)}}
 @keyframes boil{0%{transform:rotate(0)}33%{transform:rotate(1.2deg) translate(.4px,-.4px)}66%{transform:rotate(-.8deg) translate(-.4px,.4px)}}
 
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
@@ -78,13 +75,14 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
 
 /* progreso: siete puntitos a tinta */
 .prog{display:flex;gap:10px;justify-content:center;margin:2px 0 16px;min-height:12px}
-.prog i{width:11px;height:11px;border:2px solid var(--txt);border-radius:60% 40% 55% 45%/45% 55% 45% 55%;opacity:.45;transition:background .4s,opacity .4s,transform .4s}
-.prog i.done{background:var(--txt);opacity:.45}
+.prog i{width:11px;height:11px;border:2px solid var(--txt);background:var(--bgc);border-radius:60% 40% 55% 45%/45% 55% 45% 55%;opacity:.8;transition:background .4s,opacity .4s,transform .4s}
+.prog i.done{background:var(--txt);opacity:.6}
 .prog i.now{background:var(--yellow);opacity:1;transform:scale(1.25) rotate(12deg)}
 
 /* tipografía */
-.say{margin:0;font:400 2.3rem/1.05 var(--f-display);color:var(--txt);text-align:center;text-wrap:balance;transition:color .8s}
+.say{margin:0;font:400 2.3rem/1.05 var(--f-display);color:var(--txt);text-align:center;text-wrap:balance;transition:color .8s;text-shadow:0 2px 0 var(--bgc),0 -2px 0 var(--bgc),2px 0 0 var(--bgc),-2px 0 0 var(--bgc)}
 .say.small{font-size:1.75rem}
+.sub,.tap,.foot{text-shadow:0 1px 0 var(--bgc),0 -1px 0 var(--bgc),1px 0 0 var(--bgc),-1px 0 0 var(--bgc)}
 .sub{margin:0;text-align:center;font-size:1.15rem;color:var(--txt-soft);transition:color .8s}
 .c{opacity:0;transition:opacity .35s}
 .c.on{opacity:1}
@@ -123,6 +121,36 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
 .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .row .btn{flex:1}
 .stack{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+
+/* consola de entrada */
+#p-lock{padding-top:5vh;gap:26px}
+.termwrap{position:relative}
+.term{position:relative;background:#1f2640;border:1px solid #0e1221;border-radius:12px;box-shadow:0 24px 60px -24px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,255,255,.04);overflow:hidden;font:400 .9rem/1.6 var(--f-mono);color:#e9e3d3}
+.term-bar{display:flex;align-items:center;gap:7px;padding:10px 12px;background:#171d33;border-bottom:1px solid rgba(255,255,255,.06);color:#7d84a3;font-size:.75rem}
+.term-bar i{width:11px;height:11px;border-radius:50%}
+.term-bar i:nth-child(1){background:#d64550}.term-bar i:nth-child(2){background:#f2c35b}.term-bar i:nth-child(3){background:#8dbd9b}
+.term-bar span{flex:1;text-align:center;margin-right:40px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.term-body{padding:14px 14px 16px;min-height:290px;background-image:repeating-linear-gradient(to bottom,rgba(255,255,255,.022) 0 1px,transparent 1px 3px)}
+.tl{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.tl.cmd{color:#f7eedb}.tl.muted{color:#8e95b3}.tl.ok{color:#8dbd9b}.tl.err{color:#ec8fae}.tl.warn{color:#f2c35b}.tl.echo{color:#f7eedb}
+.tl.cur::after{content:"";display:inline-block;width:.55em;height:1.05em;margin-left:2px;vertical-align:-.15em;background:#f2c35b;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.term-form{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.term-q{margin:0;color:#f2c35b}
+.term-line{display:flex;align-items:center;gap:8px;border:1px dashed rgba(247,238,219,.28);border-radius:8px;padding:4px 4px 4px 10px}
+.term-line:focus-within{border-style:solid;border-color:#f2c35b}
+.term-line .ps{color:#8dbd9b;font-weight:700}
+.term-in{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#f7eedb;font:400 16px/1.4 var(--f-mono);caret-color:#f2c35b;padding:8px 0}
+.term-in::placeholder{color:#5d6485}
+.term-go{appearance:none;cursor:pointer;border:0;background:#f2c35b;color:#1f2640;font:700 .8rem/1 var(--f-mono);border-radius:6px;padding:11px 10px;touch-action:manipulation;white-space:nowrap}
+.term-go:active{transform:translateY(1px)}
+.term .hearts{color:#8e95b3;font-size:.8rem}
+.term .hearts svg{width:22px;height:20px}
+.tag{position:absolute;right:-6px;top:-20px;z-index:2;background:#fbeeb0;padding:6px 14px 4px;font:700 1.45rem/1 var(--f-script);color:var(--ink);transform:rotate(5deg);box-shadow:2px 3px 0 rgba(0,0,0,.25)}
+.tag::before{content:"";position:absolute;left:50%;top:-9px;width:50px;height:16px;margin-left:-25px;background:var(--tape);transform:rotate(-4deg)}
+.term.out{animation:termout .9s ease-in forwards}
+@keyframes termout{35%{filter:brightness(1.5)}100%{transform:scale(1.06);opacity:0;filter:blur(6px) brightness(2.2)}}
+body[data-ch="lock"] .postit{box-shadow:2px 3px 0 rgba(0,0,0,.3)}
 
 /* post-its */
 .postits{display:flex;flex-direction:column;gap:10px}
@@ -321,11 +349,26 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
       <feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="4" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
     </filter>
+    <filter id="paint" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" seed="8" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".9 .08" numOctaves="2" seed="2" result="s"/>
+      <feColorMatrix in="s" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.4 1.1" result="streak"/>
+      <feComposite in="streak" in2="d" operator="in" result="st"/>
+      <feBlend in="st" in2="d" mode="screen"/>
+    </filter>
+    <filter id="paintSoft" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" seed="8" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
+    </filter>
   </defs>
 </svg>
 
-<div id="bg" aria-hidden="true"><div class="wash a"></div><div class="wash b"></div><div class="grain"></div></div>
-<div id="doodles" aria-hidden="true"></div>
+<svg id="bg" aria-hidden="true">
+  <defs><pattern id="checks" width="184" height="184" patternUnits="userSpaceOnUse"><g id="cells"></g></pattern></defs>
+  <rect width="100%" height="100%" fill="url(#checks)" filter="url(#paint)"/>
+</svg>
+<div id="shapes" aria-hidden="true"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <div class="app">
@@ -333,23 +376,21 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
 
   <!-- 0 · candado -->
   <section class="page" id="p-lock">
-    <div class="note">
-      <p class="to" data-t="lock.to"></p>
-      <h3 data-say-t="lock.title"></h3>
-      <p data-t="lock.lede"></p>
-      <form id="pwForm" class="stack" autocomplete="off">
-        <input class="field" id="pwInput" type="text" inputmode="decimal" data-t-ph="lock.ph" data-t-aria="lock.aria" autocapitalize="off" spellcheck="false">
-        <div class="hearts" id="hearts"></div>
-        <p class="feedback" id="pwFb" aria-live="polite"></p>
-        <div class="postits" id="pwHints"></div>
-        <button class="btn wide" type="submit" data-t="lock.open"></button>
-      </form>
-      <div class="lockbox" id="locked" hidden>
-        <p data-t="lock.lockedTitle"></p>
-        <strong id="lockCd">00:00</strong>
-        <p data-t="lock.lockedHint"></p>
+    <div class="termwrap">
+      <div class="tag" data-t="lock.tag"></div>
+      <div class="term" id="term">
+        <div class="term-bar"><i></i><i></i><i></i><span data-t="lock.bar"></span></div>
+        <div class="term-body">
+          <div id="termLog" aria-live="polite"></div>
+          <form id="pwForm" class="term-form" autocomplete="off" hidden>
+            <label class="term-q" for="pwInput" data-t="lock.prompt"></label>
+            <div class="term-line"><span class="ps">›</span><input class="term-in" id="pwInput" type="text" inputmode="decimal" data-t-ph="lock.ph" autocapitalize="off" autocorrect="off" spellcheck="false"><button class="term-go" type="submit" data-t="lock.enter"></button></div>
+            <div class="hearts" id="hearts"></div>
+          </form>
+        </div>
       </div>
     </div>
+    <div class="postits" id="pwHints"></div>
   </section>
 
   <!-- 1 · foto -->
@@ -610,10 +651,12 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
   const TXT = {
     next: "sigue →",
     lock: {
-      to: "Para {nombre} ♥", title: "Esto está guardado bajo llave.", lede: "Para abrirlo, escribe dónde empezó todo.",
-      ph: "latitud, longitud", aria: "Coordenadas", attempts: "intentos:", open: "abrir",
-      ok: "Nápoles. Ahí empezó todo.", wrong: "No es ahí. Mira la pista nueva.", last: "No… te queda un intento.",
-      lockedTitle: "Se ha cerrado un ratito.", lockedHint: "Respira y vuelve a intentarlo cuando llegue a cero."
+      tag: "para {nombre} ♥", bar: "sorpresa_30 — terminal",
+      boot: ["$ ./abrir sorpresa_30", "cargando recuerdos… ok", "archivo protegido con el lugar donde empezó todo"],
+      prompt: "introduce las coordenadas (latitud, longitud):", ph: "00.00, 00.00", enter: "enter ↵", attempts: "intentos:",
+      denied: "✗ acceso denegado · no es ahí", last: "✗ acceso denegado · te queda un intento",
+      granted: "✓ acceso concedido", ok: "Nápoles. Ahí empezó todo.", opening: "abriendo sorpresa",
+      locked: "⚠ demasiados intentos · sistema bloqueado", retryIn: "reintento en {t}", retry: "listo. inténtalo de nuevo"
     },
     photo: { say: "¿Quién cumple 30 hoy?", tap: "toca la foto", aria: "Toca la foto", empty: "aquí irá su foto", cap: "¡Tú! Feliz cumpleaños, {nombre}" },
     q: {
@@ -665,11 +708,14 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
   const PAL = ['#f2c35b', '#9db8e0', '#d64550', '#eb9ab2', '#fffcf5'];
 
   /* ---------- textos ---------- */
-  function t(key, vars){
-    let s = key.split('.').reduce((o, k) => o && o[k], TXT);
-    if (typeof s !== 'string') return s == null ? key : s;
+  function fmt(s, vars){
     vars = Object.assign({ nombre: CONFIG.nombre }, vars);
-    return s.replace(/\{(\w+)\}/g, (m, k) => k in vars ? vars[k] : m);
+    return String(s).replace(/\{(\w+)\}/g, (m, k) => k in vars ? vars[k] : m);
+  }
+  function t(key, vars){
+    const s = key.split('.').reduce((o, k) => o && o[k], TXT);
+    if (typeof s !== 'string') return s == null ? key : s;
+    return fmt(s, vars);
   }
   // escribe texto y cambia "♥" por un corazón dibujado (evita el emoji del sistema)
   const HEART_D = 'M15 27 C 3 19, 0 12, 4 7 C 8 2, 14 4, 15 9 C 16 4, 22 2, 26 7 C 30 12, 27 19, 15 27 Z';
@@ -684,44 +730,55 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
     $$('[data-t-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.tAria)));
     $$('[data-say-t]').forEach(el => el.dataset.say = t(el.dataset.sayT));
     $$('[data-name]').forEach(el => el.textContent = CONFIG.nombre);
-    document.title = t('lock.to').replace('♥', '').trim();
+    document.title = t('lock.tag').replace('♥', '').trim().replace(/^./, c => c.toUpperCase());
   }
   applyTexts();
 
-  /* ---------- garabatos ---------- */
+  /* ---------- fondo: cuadros de acuarela ---------- */
   const starPath = (cx, cy, R, r, n = 5) => { let d = ''; for (let i=0;i<n*2;i++){ const a = -Math.PI/2 + i*Math.PI/n, rr = i%2 ? r : R; d += (i ? 'L' : 'M') + (cx + Math.cos(a)*rr).toFixed(1) + ' ' + (cy + Math.sin(a)*rr).toFixed(1); } return d + 'Z'; };
-  const DOODLE = {
-    star: [starPath(30, 32, 24, 11)],
-    heart: ['M30 50 C 10 36, 6 24, 12 16 C 18 8, 28 10, 30 20 C 32 10, 42 8, 48 16 C 54 24, 50 36, 30 50 Z'],
-    sparkle: ['M30 6 C 32 22, 38 28, 54 30 C 38 32, 32 38, 30 54 C 28 38, 22 32, 6 30 C 22 28, 28 22, 30 6 Z'],
-    spiral: ['M31 30 c0 -3 -4 -3 -4 0 c0 5 8 5 8 0 c0 -8 -12 -8 -12 0 c0 11 16 11 16 0 c0 -14 -20 -14 -20 0 c0 16 22 17 25 2'],
-    key: ['M8 30 a9 9 0 1 0 18 0 a9 9 0 1 0 -18 0', 'M26 30 H54 M46 30 v8 M52 30 v6'],
-    question: ['M19 20 q0 -13 12 -13 q12 0 12 11 q0 8 -10 12 q-4 2 -4 9', 'M29 50 l.5 1'],
-    wave: ['M4 32 q7 -10 14 0 t14 0 t14 0 t12 0', 'M10 44 q6 -7 12 0 t12 0 t12 0'],
-    sword: ['M14 46 L42 18 l7 -3 l-3 7 L18 50', 'M14 38 l8 8', 'M10 50 l4 -4'],
-    flower: ['M30 26 c-8 -14 8 -14 0 0 c14 -8 14 8 0 0 c8 14 -8 14 0 0 c-14 8 -14 -8 0 0', 'M30 34 C 30 44, 28 50, 26 56'],
-    envelope: ['M8 18 h44 v28 h-44 z', 'M8 18 l22 16 l22 -16'],
-    note: ['M22 44 a5 4 -20 1 1 -1 -1 V14 l20 -5 V38 a5 4 -20 1 1 -1 -1', 'M21 22 l20 -5']
+  const CHECKS = (function(){
+    const S = 46, rnd = (a, b) => a + Math.random()*(b - a); let h = '';
+    for (let r=0;r<4;r++) for (let c=0;c<4;c++){
+      const x = c*S, y = r*S;
+      if ((r + c) % 2){
+        h += `<rect x="${x+1}" y="${y+1}" width="${S-2}" height="${S-2}" style="fill:var(--ck);stroke:var(--ck2)" fill-opacity="${rnd(.5, .85).toFixed(2)}" stroke-width="1.2"/>`;
+        for (let k=0;k<3;k++) h += `<rect x="${(x + rnd(5, 26)).toFixed(1)}" y="${(y + rnd(6, 34)).toFixed(1)}" width="${rnd(8, 16).toFixed(1)}" height="${rnd(2, 4).toFixed(1)}" rx="1.5" style="fill:var(--ck2)" opacity="${rnd(.2,.4).toFixed(2)}" transform="rotate(${rnd(-80,-100).toFixed(0)} ${x+S/2} ${y+S/2})"/>`;
+      } else h += `<rect x="${x}" y="${y}" width="${S}" height="${S}" style="fill:var(--bgc)"/>`;
+    }
+    return h;
+  })();
+  const paintChecks = () => { $('#cells').innerHTML = CHECKS; };
+  paintChecks();
+
+  /* ---------- fondo: figuras que crecen (cambian en cada capítulo) ---------- */
+  const SHAPE = {
+    star: c => `<path d="${starPath(50,52,44,20)}" fill="${c}" stroke="${c}" stroke-width="8" stroke-linejoin="round"/><path d="${starPath(46,48,24,11)}" fill="#fff" opacity=".3"/>`,
+    sparkle: c => `<path d="M50 4 C 54 34, 66 46, 96 50 C 66 54, 54 66, 50 96 C 46 66, 34 54, 4 50 C 34 46, 46 34, 50 4 Z" fill="${c}" stroke="${c}" stroke-width="6" stroke-linejoin="round"/><circle cx="50" cy="50" r="8" fill="#fff" opacity=".35"/>`,
+    heart: c => `<path d="M50 90 C 12 64, 4 40, 16 24 C 28 8, 46 14, 50 30 C 54 14, 72 8, 84 24 C 96 40, 88 64, 50 90 Z" fill="${c}" stroke="${c}" stroke-width="6" stroke-linejoin="round"/><path d="M26 34 q3 -10 13 -10" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".45"/>`,
+    flower: c => [0,72,144,216,288].map(a => `<ellipse cx="50" cy="26" rx="17" ry="22" fill="${c}" transform="rotate(${a} 50 50)"/>`).join('') + `<circle cx="50" cy="50" r="14" fill="#f6c55a"/><circle cx="46" cy="46" r="4" fill="#fff" opacity=".5"/>`
   };
-  const THEMES = {
-    lock: ['key', 'star', 'sparkle', 'heart', 'spiral'],
-    photo: ['star', 'sparkle', 'star', 'heart', 'spiral'],
-    questions: ['question', 'sparkle', 'note', 'heart', 'question'],
-    game: ['wave', 'sword', 'sparkle', 'star', 'wave'],
-    gift: ['flower', 'heart', 'sparkle', 'flower', 'heart'],
-    cake: ['sparkle', 'star', 'heart', 'sparkle', 'star'],
-    letter: ['envelope', 'heart', 'spiral', 'sparkle', 'heart'],
-    hug: ['heart', 'sparkle', 'heart', 'star', 'heart']
+  const Y = '#f6c55a', R = '#ec8fae', D = '#d9505f';
+  const SHAPE_THEMES = {
+    lock:      [['star', Y]],
+    photo:     [['star', Y], ['sparkle', Y]],
+    questions: [['sparkle', Y], ['star', Y]],
+    game:      [['star', Y]],
+    gift:      [['flower', '#e57a9e'], ['flower', '#7aa0d6']],
+    cake:      [['star', Y], ['sparkle', '#fff3c4']],
+    letter:    [['heart', R]],
+    hug:       [['heart', D], ['heart', R]]
   };
-  const SPOTS = [[3, 7, 46, -12], [84, 5, 40, 10], [88, 44, 38, 14], [2, 60, 42, -8], [80, 86, 48, -6]];
-  function drawDoodles(ch){
-    const box = $('#doodles');
-    [...box.children].forEach(d => { d.classList.add('bye'); setTimeout(() => d.remove(), 700); });
-    (THEMES[ch] || []).forEach((name, i) => {
-      const [x, y, w, r] = SPOTS[i % SPOTS.length];
-      const d = document.createElement('span'); d.className = 'dd';
-      d.style.left = x + '%'; d.style.top = y + '%'; d.style.width = w + 'px'; d.style.transform = `rotate(${r}deg)`;
-      d.innerHTML = `<svg viewBox="0 0 60 60">${DOODLE[name].map(p => `<path pathLength="1" d="${p}" style="animation-delay:${300 + i*180}ms"/>`).join('')}</svg>`;
+  const SPOTS = [[10,8],[78,10],[48,28],[14,48],[80,50],[46,68],[16,86],[80,88]];
+  function drawShapes(ch, k){
+    const box = $('#shapes'), set = SHAPE_THEMES[ch] || SHAPE_THEMES.lock;
+    [...box.children].forEach(d => { d.classList.add('bye'); setTimeout(() => d.remove(), 520); });
+    const growBy = 1 + Math.max(0, k)*0.07;          // cada capítulo, un poco más grandes
+    SPOTS.forEach(([x, y], i) => {
+      const [name, col] = set[i % set.length];
+      const d = document.createElement('span'); d.className = 'shp';
+      d.style.left = x + '%'; d.style.top = y + '%'; d.style.width = Math.round((i % 3 ? 34 : 46)*growBy) + 'px';
+      d.style.setProperty('--rot', ((i*37) % 30 - 15) + 'deg'); d.style.animationDelay = (250 + i*110) + 'ms';
+      d.innerHTML = `<span class="grow" style="--gd:${(5 + (i*1.3) % 4).toFixed(1)}s;--gdl:-${(i*0.9).toFixed(1)}s"><svg viewBox="0 0 100 100"><g filter="url(#wobble)">${SHAPE[name](col)}</g></svg></span>`;
       box.appendChild(d);
     });
   }
@@ -817,8 +874,9 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
   function setChapter(id){
     const ch = id.replace('p-', '');
     document.body.dataset.ch = ch; document.body.classList.remove('night');
-    drawDoodles(ch);
     const k = CHAPTERS.indexOf(id);
+    drawShapes(ch, k);
+    setTimeout(paintChecks, 1300);   // refresca el patrón al terminar la transición (Safari)
     $('#prog').style.visibility = k < 0 ? 'hidden' : 'visible';
     $$('#prog i').forEach((d, i) => { d.className = i < k ? 'done' : i === k ? 'now' : ''; });
   }
@@ -840,6 +898,13 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
   let lock = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || { fails: 0, until: 0 }; } catch(e){ return { fails: 0, until: 0 }; } })();
   const saveLock = () => { try { localStorage.setItem(KEY, JSON.stringify(lock)); } catch(e){} };
   const heartSVG = `<svg viewBox="0 0 30 28" aria-hidden="true"><g class="h1"><path d="M15 26 C 3 18, 0 11, 4 6 C 8 1, 14 3, 15 8 L13 14 L16 18 Z" fill="#d64550" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/></g><g class="h2"><path d="M15 26 L16 18 L13 14 L15 8 C 16 3, 22 1, 26 6 C 30 11, 27 18, 15 26 Z" fill="#d64550" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/></g></svg>`;
+  const termLog = $('#termLog');
+  function tline(text, cls){ const p = document.createElement('p'); p.className = 'tl ' + (cls || ''); p.textContent = text; termLog.appendChild(p); return p; }
+  function typeLine(text, cls, cb){
+    const p = tline('', cls + ' cur');
+    if (reduce){ p.textContent = text; p.classList.remove('cur'); return cb(); }
+    let k = 0; const iv = setInterval(() => { p.textContent = text.slice(0, ++k); if (k >= text.length){ clearInterval(iv); setTimeout(() => { p.classList.remove('cur'); cb(); }, 180); } }, 24);
+  }
   function renderLock(){
     const left = L.intentos - lock.fails;
     $('#hearts').innerHTML = `<span>${t('lock.attempts')}</span>` + Array.from({length: L.intentos}, (_, i) => `<span class="${i >= left ? 'broken' : ''}">${heartSVG}</span>`).join('');
@@ -859,37 +924,61 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
   }
   let lockT = null;
   function showLocked(){
-    $('#pwForm').hidden = true; $('#locked').hidden = false;
+    $('#pwForm').hidden = true;
+    tline(t('lock.locked'), 'warn');
+    const line = tline('', 'muted cur');
     const upd = () => {
       const ms = lock.until - Date.now();
-      if (ms <= 0){ clearInterval(lockT); lock = { fails: 0, until: 0 }; saveLock(); $('#locked').hidden = true; $('#pwForm').hidden = false; $('#pwFb').textContent = ''; renderLock(); return; }
+      if (ms <= 0){
+        clearInterval(lockT); lock = { fails: 0, until: 0 }; saveLock();
+        line.className = 'tl ok'; line.textContent = t('lock.retry');
+        $('#pwForm').hidden = false; renderLock(); return;
+      }
       const h = Math.floor(ms/3600000), m = Math.floor(ms%3600000/60000), s = Math.floor(ms%60000/1000);
-      $('#lockCd').textContent = (h ? [h, m, s] : [m, s]).map(v => String(v).padStart(2, '0')).join(':');
+      line.textContent = t('lock.retryIn', { t: (h ? [h, m, s] : [m, s]).map(v => String(v).padStart(2, '0')).join(':') });
     };
     upd(); clearInterval(lockT); lockT = setInterval(upd, 1000);
   }
+  function openSurprise(){
+    tline(t('lock.granted'), 'ok'); tline(t('lock.ok'), 'echo');
+    const bar = tline('', 'warn'); let n = 0;
+    const draw = () => bar.textContent = `${t('lock.opening')} [${'#'.repeat(n)}${'.'.repeat(10 - n)}] ${n*10}%`;
+    draw();
+    const iv = setInterval(() => {
+      n++; draw();
+      if (n >= 10){ clearInterval(iv); setTimeout(() => { $('#term').classList.add('out'); setTimeout(() => show('p-photo'), reduce ? 0 : 750); }, reduce ? 0 : 350); }
+    }, reduce ? 0 : 120);
+  }
   $('#pwForm').addEventListener('submit', e => {
     e.preventDefault();
-    const inp = $('#pwInput'), val = inp.value.trim(), fb = $('#pwFb'); if (!val) return;
+    const inp = $('#pwInput'), val = inp.value.trim(); if (!val) return;
+    tline('› ' + val, 'echo'); inp.value = '';
     if (coordsOk(val)){
-      lock = { fails: 0, until: 0 }; saveLock(); inp.blur();
-      fb.className = 'feedback good'; fb.textContent = t('lock.ok');
-      burst(...center(inp), 26, 6);
-      setTimeout(() => show('p-photo'), reduce ? 200 : 1500);
+      lock = { fails: 0, until: 0 }; saveLock(); inp.blur(); $('#pwForm').hidden = true; $('#pwHints').innerHTML = '';
+      setTimeout(openSurprise, reduce ? 0 : 250);
       return;
     }
-    inp.value = ''; lock.fails++;
+    lock.fails++;
     const left = L.intentos - lock.fails;
-    fb.className = 'feedback';
-    if (left <= 0 && L.bloqueoMinutos > 0){ lock.until = Date.now() + L.bloqueoMinutos*60000; saveLock(); renderLock(); setTimeout(showLocked, 700); }
+    if (left <= 0 && L.bloqueoMinutos > 0){ tline(t('lock.denied'), 'err'); lock.until = Date.now() + L.bloqueoMinutos*60000; saveLock(); renderLock(); setTimeout(showLocked, 500); }
     else {
       if (left <= 0) lock.fails = L.intentos - 1;
-      saveLock(); fb.textContent = left <= 1 ? t('lock.last') : t('lock.wrong'); shake(inp); renderLock();
+      saveLock(); tline(left <= 1 ? t('lock.last') : t('lock.denied'), 'err'); shake($('.term-line')); renderLock();
     }
   });
   (function bootLock(){
-    const el = $('#p-lock'); el.classList.add('in'); setChapter('p-lock'); writeSay(el);
-    if (lock.until > Date.now()) showLocked(); else { if (lock.fails >= L.intentos) lock.fails = 0; renderLock(); }
+    const el = $('#p-lock'); el.classList.add('in'); setChapter('p-lock');
+    const lines = TXT.lock.boot.map(x => fmt(x));
+    let i = 0;
+    const next = () => {
+      if (i >= lines.length){
+        if (lock.until > Date.now()) showLocked();
+        else { if (lock.fails >= L.intentos) lock.fails = 0; $('#pwForm').hidden = false; renderLock(); }
+        return;
+      }
+      typeLine(lines[i], i === 0 ? 'cmd' : 'muted', () => { i++; setTimeout(next, reduce ? 0 : 220); });
+    };
+    setTimeout(next, reduce ? 0 : 500);
   })();
 
   /* ---------- 1 · foto ---------- */
@@ -1170,7 +1259,7 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
   function blow(c){ if (!canBlow || c.classList.contains('out')) return; c.classList.add('out'); blown++; if (blown >= 2) blownAll(); }
   function blownAll(){
     canBlow = false; $('#tartbox').classList.remove('wish'); $('#blowBtn').hidden = true;
-    setTimeout(() => { document.body.classList.remove('night'); setText($('#cakeSub'), t('cake.done')); celebrate(); }, reduce ? 0 : 700);
+    setTimeout(() => { document.body.classList.remove('night'); setTimeout(paintChecks, 1300); setText($('#cakeSub'), t('cake.done')); celebrate(); }, reduce ? 0 : 700);
     reveal($('#nextCake'), 1900);
   }
   function gusts(){
@@ -1183,7 +1272,7 @@ body.night #bg .wash{mix-blend-mode:normal;opacity:.9}
     setText($('#cakeSub'), t('cake.sub'));
   };
   $('#wishBtn').addEventListener('click', () => {
-    $('#wishBtn').hidden = true; $('#tartbox').classList.add('wish'); document.body.classList.add('night');
+    $('#wishBtn').hidden = true; $('#tartbox').classList.add('wish'); document.body.classList.add('night'); setTimeout(paintChecks, 1300);
     setText($('#cakeSub'), t('cake.blowHint'));
     canBlow = true; reveal($('#blowBtn'), 900);
   });
